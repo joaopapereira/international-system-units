@@ -54,4 +54,8 @@ public class ISUUnit {
 	public String toString(){
 		return new String("ISUUnit");
 	}
+	public String name(){
+
+		return new String("ISUUnit");
+	}
 }

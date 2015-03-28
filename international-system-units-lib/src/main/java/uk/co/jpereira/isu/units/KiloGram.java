@@ -1,6 +1,9 @@
 package uk.co.jpereira.isu.units;
 
 public class KiloGram extends ISUUnit {
+	public KiloGram(){
+		super(0, 1);
+	}
 	public KiloGram(double amount){
 		super(amount, 1);
 	}

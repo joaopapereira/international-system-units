@@ -1,6 +1,9 @@
 package uk.co.jpereira.isu.units;
 
 public class Meter extends ISUUnit {
+	public Meter(){
+		super(0, 1);
+	}
 	public Meter(double amount){
 		super(amount, 1);
 	}

@@ -38,7 +38,7 @@ public abstract class UnitTranslator<Unit1, Unit2> extends SharedMemoryObject{
 	public final Class<Unit2> to() {
 		return to;
 	}
-	
+	public abstract Unit1 convert(Unit2 from);
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */

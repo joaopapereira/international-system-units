@@ -3,6 +3,9 @@ package uk.co.jpereira.isu.units_accepted;
 import uk.co.jpereira.isu.units.ISUUnit;
 
 public class Liter extends ISUUnit {
+	public Liter(){
+		super(0, 1);
+	}
 
 	public Liter(double amount){
 		super(amount, 1);
