@@ -6,6 +6,9 @@ import uk.co.jpereira.isu.units_accepted.liter.DecaLiter;
 @Translator
 public class LiterToDecaLiter extends UnitTranslator<Liter, DecaLiter> {
 
+	/**
+	 * Translator constructor
+	 */
 	public LiterToDecaLiter() {
 		super(Liter.class, DecaLiter.class);
 	}

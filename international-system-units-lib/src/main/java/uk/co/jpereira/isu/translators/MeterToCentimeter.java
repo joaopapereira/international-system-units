@@ -6,6 +6,9 @@ import uk.co.jpereira.isu.units.meter.CentiMeter;
 @Translator
 public class MeterToCentimeter extends UnitTranslator<Meter, CentiMeter> {
 
+	/**
+	 * Translator constructor
+	 */
 	public MeterToCentimeter() {
 		super(Meter.class, CentiMeter.class);
 	}

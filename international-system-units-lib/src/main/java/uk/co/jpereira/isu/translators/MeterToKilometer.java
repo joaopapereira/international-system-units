@@ -6,6 +6,9 @@ import uk.co.jpereira.isu.units.meter.KiloMeter;
 @Translator
 public class MeterToKilometer extends UnitTranslator<Meter, KiloMeter> {
 
+	/**
+	 * Translator constructor
+	 */
 	public MeterToKilometer() {
 		super(Meter.class, KiloMeter.class);
 	}
