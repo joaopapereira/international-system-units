@@ -21,9 +21,7 @@ class Registry{
 	}
 	public SharedMemoryObject find (Class<?> c1, Class<?> c2) {
 
-		System.out.println("Bamm....");
 		for(SharedMemoryObject c: registry){
-			System.out.println("Bamm: " + c.hashCode());
 			if(c.hashCode() == (c1.hashCode()+c2.hashCode())){
 				return c;
 			}
