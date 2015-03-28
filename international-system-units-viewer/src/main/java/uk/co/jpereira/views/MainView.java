@@ -13,8 +13,42 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import uk.co.jpereira.isu.ISUUnits;
+import uk.co.jpereira.isu.translators.UnitTranslator;
+import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Meter;
 
+import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+class ComboItem
+{
+    private String key;
+    private Class value;
+
+    public ComboItem(String key, Class value)
+    {
+        this.key = key;
+        this.value = value;
+    }
+
+    @Override
+    public String toString()
+    {
+        return key;
+    }
+
+    public String getKey()
+    {
+        return key;
+    }
+
+    public Class getValue()
+    {
+        return value;
+    }
+}
 public class MainView extends JFrame implements Observer{
 	public static final Dimension contentSize = new Dimension(600, 430);
 	public static final int borderSize = 5;
@@ -49,14 +83,45 @@ public class MainView extends JFrame implements Observer{
 		textField_1.setColumns(10);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(129, 68, 106, 20);
-		contentPane.add(comboBox);
-		comboBox.addItem(new Meter(1));
-		
-		
 		JComboBox comboBox_1 = new JComboBox();
+		comboBox.setBounds(129, 68, 111, 20);
+		contentPane.add(comboBox);
+		for(Class<? extends ISUUnit> unit: ISUUnits.retrieveAllUnits()){
+			ISUUnit obj;
+			try {
+				obj = unit.newInstance();
+				comboBox.addItem(new ComboItem(obj.toString(), unit));
+				comboBox_1.addItem(new ComboItem(obj.toString(), unit));
+			} catch (InstantiationException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
 		comboBox_1.setBounds(392, 68, 102, 20);
 		contentPane.add(comboBox_1);
+		
+		JButton btnConvert = new JButton("Convert");
+		btnConvert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(textField.getText().length() == 0){
+					return;
+				}
+				float f = Float.parseFloat(textField.getText());
+				Class cls1, cls2;
+				cls1 = ((ComboItem)comboBox.getSelectedItem()).getValue();
+				cls2 = ((ComboItem)comboBox_1.getSelectedItem()).getValue();
+				UnitTranslator<?, ?> converter = ISUUnits.retrieveTranslator(cls1, cls2);
+				ISUUnit unit = (ISUUnit) ((ComboItem)comboBox.getSelectedItem()).getValue().newInstance();
+				unit.setAmount(f);
+				textField_1.setText(converter.covert(unit));
+				
+			}
+		});
+		btnConvert.setBounds(304, 123, 89, 23);
+		contentPane.add(btnConvert);
 		this.setResizable(false);
 		
 		timer = new Timer();
