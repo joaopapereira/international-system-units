@@ -1,17 +1,41 @@
 package uk.co.jpereira.isu.units;
 
-public class Meter extends ISUUnit {
+public class Meter extends ISUUnit<Double> {
+	/**
+	 * ISUUnit constructor
+	 * @param amount Amount of unit
+	 * @param toUnit conversion factor
+	 */
+	public Meter(Double amount, UnitModifier toUnit){
+		super(amount, toUnit);
+	}
+	/**
+	 * ISUUnit constructor
+	 * @param amount Amount of unit
+	 */
+	public Meter(Double amount){
+		super(amount, UnitModifier.Unit);
+	}
+	/**
+	 * ISUUnit constructor
+	 * @param toUnit conversion factor
+	 */
+	public Meter(UnitModifier toUnit){
+		super(0., toUnit);
+	}
+	/**
+	 * ISUUnit constructor
+	 * @param toUnit conversion factor
+	 */
 	public Meter(){
-		super(0, 1);
-	}
-	public Meter(double amount){
-		super(amount, 1);
-	}
-	protected Meter(double amount, double toUnit){
-		super(amount, 1);
+		super(0., UnitModifier.Unit);
 	}
 	@Override
-	public String toString(){
+	public String name() {
 		return new String("Meter");
+	}
+	@Override
+	public String smallName() {
+		return new String("m");
 	}
 }

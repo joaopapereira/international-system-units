@@ -1,5 +1,6 @@
 package uk.co.jpereira.isu.translators;
 
+import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.KiloGram;
 import uk.co.jpereira.isu.units.kilogram.Gram;
 
@@ -31,5 +32,7 @@ public class KiloGramToGram extends UnitTranslator<KiloGram, Gram> {
 	public Gram convert(KiloGram from) {
 		return new Gram(from.getAmount()/Gram.toUnit);
 	}
+
+	
 
 }

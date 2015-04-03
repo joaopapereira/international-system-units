@@ -14,14 +14,14 @@ public class UnitModifierTest {
 		public UnitModifier modifier;
 		public double factorValue;
 		public double numberToConvert;
-		public double convertedResult;
+		public Double convertedResult;
 		public String fullName;
 		public String smallName;
 		public TestObject(UnitModifier modifier, double factorValue, double numberToConvert, String fullName, String smallName){
 			this.modifier = modifier;
 			this.factorValue = factorValue;
 			this.numberToConvert = numberToConvert;
-			this.convertedResult = factorValue * numberToConvert;
+			this.convertedResult = numberToConvert / factorValue;
 			this.fullName = fullName;
 			this.smallName = smallName;
 		}

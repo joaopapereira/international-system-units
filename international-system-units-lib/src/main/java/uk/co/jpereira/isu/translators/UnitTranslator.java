@@ -1,8 +1,13 @@
 package uk.co.jpereira.isu.translators;
 
+import uk.co.jpereira.isu.units.ISUUnit;
+import uk.co.jpereira.isu.units.KiloGram;
+import uk.co.jpereira.isu.units.kilogram.Gram;
 import uk.co.jpereira.utils.SharedMemoryObject;
 
-public abstract class UnitTranslator<Unit1, Unit2> extends SharedMemoryObject{
+
+public class UnitTranslator<Unit1, Unit2> extends SharedMemoryObject
+implements TranslationInterface{
 	private final Class<Unit1> from;
 	private final Class<Unit2> to;
 
@@ -38,7 +43,6 @@ public abstract class UnitTranslator<Unit1, Unit2> extends SharedMemoryObject{
 	public final Class<Unit2> to() {
 		return to;
 	}
-	public abstract Unit1 convert(Unit2 from);
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -65,5 +69,12 @@ public abstract class UnitTranslator<Unit1, Unit2> extends SharedMemoryObject{
     public boolean match (Class<?> from, Class<?> to) {
         return from().equals(from) && to().equals(to);
     }
-    
+    @Override
+	public ISUUnit convert(ISUUnit unit) {
+		if(unit.getClass() == from.getClass())
+			return convert((Unit1)unit);
+		else
+			return convert((Unit2)unit);
+
+	}
 }

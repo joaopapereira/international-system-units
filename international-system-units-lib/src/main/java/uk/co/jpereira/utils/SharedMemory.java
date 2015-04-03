@@ -22,11 +22,12 @@ class Registry{
 	public SharedMemoryObject find (Class<?> c1, Class<?> c2) {
 
 		for(SharedMemoryObject c: registry){
+			System.out.println("Current hash: "+c.hashCode()+" == " + (c1.hashCode()+c2.hashCode()));
 			if(c.hashCode() == (c1.hashCode()+c2.hashCode())){
 				return c;
 			}
 		}
-		throw new IllegalArgumentException ("No registered translation from ");
+		throw new IllegalArgumentException ("No registered translation from " + c1 +" to "+c2);
 	}
 	public void add(UnitTranslator<?,?> obj){
 		registry.add(obj);
@@ -39,7 +40,9 @@ public class SharedMemory {
 		Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(uk.co.jpereira.isu.translators.Translator.class);
 		for(Class<?> translator: annotated){
 			try {
-				System.out.println("Adding: "+translator.newInstance().toString());
+				System.out.println("Adding: "+translator.newInstance().toString() + " -> " + translator.newInstance().hashCode());
+
+				System.out.println("Adding: "+translator.newInstance().toString() + " -> " + translator.newInstance().hashCode());
 				Registry.getInstance().add( (UnitTranslator<?, ?>) translator.newInstance());
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block

@@ -113,10 +113,17 @@ public class MainView extends JFrame implements Observer{
 				Class cls1, cls2;
 				cls1 = ((ComboItem)comboBox.getSelectedItem()).getValue();
 				cls2 = ((ComboItem)comboBox_1.getSelectedItem()).getValue();
+				System.out.println("Selected stuff is: " + cls1 + " -> " + cls2);
 				UnitTranslator<?, ?> converter = ISUUnits.retrieveTranslator(cls1, cls2);
-				ISUUnit unit = (ISUUnit) ((ComboItem)comboBox.getSelectedItem()).getValue().newInstance();
+				ISUUnit unit = null;
+				try {
+					unit = (ISUUnit) ((ComboItem)comboBox.getSelectedItem()).getValue().newInstance();
+				} catch (InstantiationException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				unit.setAmount(f);
-				textField_1.setText(converter.covert(unit));
+				textField_1.setText(converter.convert(unit).toString());
 				
 			}
 		});

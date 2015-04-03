@@ -1,20 +1,44 @@
 package uk.co.jpereira.isu.units_accepted;
 
 import uk.co.jpereira.isu.units.ISUUnit;
+import uk.co.jpereira.isu.units.UnitModifier;
 
-public class Liter extends ISUUnit {
+public class Liter extends ISUUnit<Double> {
+	/**
+	 * ISUUnit constructor
+	 * @param amount Amount of unit
+	 * @param toUnit conversion factor
+	 */
+	public Liter(Double amount, UnitModifier toUnit){
+		super(amount, toUnit);
+	}
+	/**
+	 * ISUUnit constructor
+	 * @param amount Amount of unit
+	 */
+	public Liter(Double amount){
+		super(amount, UnitModifier.Unit);
+	}
+	/**
+	 * ISUUnit constructor
+	 * @param toUnit conversion factor
+	 */
+	public Liter(UnitModifier toUnit){
+		super(0., toUnit);
+	}
+	/**
+	 * ISUUnit constructor
+	 * @param toUnit conversion factor
+	 */
 	public Liter(){
-		super(0, 1);
-	}
-
-	public Liter(double amount){
-		super(amount, 1);
-	}
-	protected Liter(double amount, double toUnit){
-		super(amount, 1);
+		super(0., UnitModifier.Unit);
 	}
 	@Override
-	public String toString(){
+	public String name() {
 		return new String("Liter");
+	}
+	@Override
+	public String smallName() {
+		return new String("l");
 	}
 }

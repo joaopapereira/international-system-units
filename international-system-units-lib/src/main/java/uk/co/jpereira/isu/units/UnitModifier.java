@@ -23,13 +23,13 @@ public enum UnitModifier {
 	ZEPTO ("z", 1e-21), 
 	YOCTO ("y", 1e-24);
 	private String smallRepr;
-	private double factor;
+	private Double factor;
 	/**
 	 * Class constructor
 	 * @param smallRepr Small name for the modifier
 	 * @param factor Factor used to calculate the modification
 	 */
-	UnitModifier(String smallRepr, double factor){
+	UnitModifier(String smallRepr, Double factor){
 		this.smallRepr = smallRepr;
 		this.factor = factor;
 	}
@@ -37,7 +37,7 @@ public enum UnitModifier {
 	 * Retrieve the factor of the modification
 	 * @return Factor
 	 */
-	public double getFactor(){
+	public Double getFactor(){
 		return factor;
 	}
 	/**
@@ -45,11 +45,21 @@ public enum UnitModifier {
 	 * @param value Value to convert
 	 * @return Converted value
 	 */
-	public double convert(double value){
+	public Double convert(final Double value){
+		return value / factor;
+	}
+	/**
+	 * Convert a value to with the current modifier
+	 * @param value Value to convert
+	 * @return Converted value
+	 */
+	public Double convertToUnit(final Double value){
 		return value * factor;
 	}
 	@Override
 	public String toString(){
+		if(this == Unit)
+			return "";
 		return new String(this.name());
 	}
 	/**
