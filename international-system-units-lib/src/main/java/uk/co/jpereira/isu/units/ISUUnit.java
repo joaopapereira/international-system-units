@@ -105,7 +105,7 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	 * @param otherUnit Other unit to compare to
 	 */
 	public int compareTo(ISUUnit otherUnit){
-		return otherUnit.name().compareTo(otherUnit.name());
+		return name().compareTo(otherUnit.name());
 	}
 	public Object clone(){
 		try {
