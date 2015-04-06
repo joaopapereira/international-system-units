@@ -54,20 +54,23 @@ public class RuleOfThreePanel extends Panel {
 	private void loadUpperUnitModifiers(final ISUUnit<?> unit){
 		upLeftUnitModifier.removeAllItems();
 		upRightUnitModifier.removeAllItems();
+		ISUUnit _unit = (ISUUnit)unit.clone();
 		for(UnitModifier mod: UnitModifier.values()){
-			unit.setModifier(mod);
-			upLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
-			upRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
+			
+			_unit.setModifier(mod);
+			upLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			upRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
 		}
 	}
 	private void loadLowerUnitModifiers(final ISUUnit<?> unit){
 
 		lowLeftUnitModifier.removeAllItems();
 		lowRightUnitModifier.removeAllItems();
+		ISUUnit _unit = (ISUUnit)unit.clone();
 		for(UnitModifier mod: UnitModifier.values()){
-			unit.setModifier(mod);
-			lowLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
-			lowRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
+			_unit.setModifier(mod);
+			lowLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			lowRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
 		}
 	}
 	
