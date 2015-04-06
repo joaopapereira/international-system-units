@@ -33,10 +33,10 @@ public class Candela extends ISUUnit<Double> {
 	}
 	@Override
 	public String name() {
-		return new String("Mole");
+		return new String("Candela");
 	}
 	@Override
 	public String smallName() {
-		return new String("mol");
+		return new String("ca");
 	}
 }

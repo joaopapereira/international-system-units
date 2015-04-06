@@ -107,4 +107,16 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	public int compareTo(ISUUnit otherUnit){
 		return otherUnit.name().compareTo(otherUnit.name());
 	}
+	public Object clone(){
+		try {
+			ISUUnit unit = (ISUUnit)this.getClass().newInstance();
+			unit.amountInUnits = amountInUnits;
+			unit.modififerFromUnit = modififerFromUnit;
+			return unit;
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

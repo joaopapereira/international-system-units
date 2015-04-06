@@ -17,6 +17,7 @@ import uk.co.jpereira.isu.ISUUnits;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.UnitType;
+import uk.co.jpereira.views.MainView;
 import uk.co.jpereira.views.utils.ComboBoxItem;
 
 import javax.swing.JLabel;
@@ -29,6 +30,8 @@ public class UnitConverterPanel extends Panel {
 	JButton btnConvert;
 	public UnitConverterPanel(){
 		super();
+
+		setSize(MainView.contentSize);
 		setLayout(null);
 		fromText = new JTextField();
 		fromText.setBounds(135, 140, 86, 20);

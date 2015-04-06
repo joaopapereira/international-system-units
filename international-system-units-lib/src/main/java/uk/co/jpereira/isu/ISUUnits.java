@@ -19,6 +19,7 @@ import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.UnitType;
 import uk.co.jpereira.utils.Register;
+import uk.co.jpereira.utils.RuleOfThree;
 import uk.co.jpereira.utils.SharedMemory;
 /**
  * Class that will expose to the world the Units and they translators
@@ -72,6 +73,36 @@ public class ISUUnits {
 		unit.setModifier(from);
 		unit.setAmount(amount);
 		return (double) unit.convertTo(to);
+	}
+	@SuppressWarnings("unchecked")
+	public static double ruleOfThree(ISUUnit up, 
+										UnitModifier upLeftMod, 
+											  double upLeftAmount,
+										UnitModifier upRightMod, 
+										  	  double upRightAmount,
+								  	 ISUUnit down, 
+										UnitModifier downLeftMod, 
+											  double downLeftAmount,
+										UnitModifier downRightMod){
+		LOGGER.fine("ruleOfThree(" + up + ", "+upLeftMod+", "+ upLeftAmount + ", "+
+										  ", "+upRightMod+", "+ upRightAmount + ", "+
+								     down + ", "+downLeftMod+", "+ downLeftAmount + ", "+
+										  ", " + downRightMod +")");
+		double _upLeftAmount, _upRightAmount, _downLeftAmount;
+		ISUUnit unit = (ISUUnit)up.clone();
+		unit.setModifier(upLeftMod);
+		unit.setAmount(upLeftAmount);
+		_upLeftAmount = (double)unit.getAmountToUnit();
+		unit.setModifier(upRightMod);
+		unit.setAmount(upRightAmount);
+		_upRightAmount = (double)unit.getAmountToUnit();
+		unit = (ISUUnit)down.clone();
+		unit.setModifier(downLeftMod);
+		unit.setAmount(downLeftAmount);
+		_downLeftAmount = (double)unit.getAmount();
+		double result = RuleOfThree.calculate(_upLeftAmount, _upRightAmount, _downLeftAmount);
+		unit.setAmount(result);
+		return (double) unit.convertTo(downRightMod);
 	}
 	
 	static{

@@ -33,10 +33,10 @@ public class Mole extends ISUUnit<Double> {
 	}
 	@Override
 	public String name() {
-		return new String("Candela");
+		return new String("Mole");
 	}
 	@Override
 	public String smallName() {
-		return new String("cd");
+		return new String("mol");
 	}
 }
