@@ -14,9 +14,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import uk.co.jpereira.isu.ISUUnits;
-import uk.co.jpereira.isu.translators.UnitTranslator;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Meter;
+import uk.co.jpereira.isu.units.UnitModifier;
 
 import javax.swing.JButton;
 
@@ -61,6 +61,7 @@ public class MainView extends JFrame implements Observer{
 	private boolean timerActive = false;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JComboBox unitCombo;
 	/**
 	 * Create the frame.
 	 */
@@ -84,21 +85,26 @@ public class MainView extends JFrame implements Observer{
 		
 		JComboBox comboBox = new JComboBox();
 		JComboBox comboBox_1 = new JComboBox();
+
+		unitCombo = new JComboBox();
+		unitCombo.setBounds(129, 31, 111, 20);
+		contentPane.add(unitCombo);
 		comboBox.setBounds(129, 68, 111, 20);
 		contentPane.add(comboBox);
-		for(Class<? extends ISUUnit> unit: ISUUnits.retrieveAllUnits()){
+		for(Class<?> unit: ISUUnits.retrieveAllUnits()){
 			ISUUnit obj;
 			try {
-				obj = unit.newInstance();
-				comboBox.addItem(new ComboItem(obj.toString(), unit));
-				comboBox_1.addItem(new ComboItem(obj.toString(), unit));
+				obj = (ISUUnit)unit.newInstance();
+				unitCombo.addItem(new ComboItem(obj.toString(), unit));
 			} catch (InstantiationException | IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		
+		for(UnitModifier mod: UnitModifier.values()){
+			comboBox_1.addItem(mod);
+		}
 		
 		comboBox_1.setBounds(392, 68, 102, 20);
 		contentPane.add(comboBox_1);
@@ -129,6 +135,7 @@ public class MainView extends JFrame implements Observer{
 		});
 		btnConvert.setBounds(304, 123, 89, 23);
 		contentPane.add(btnConvert);
+		
 		this.setResizable(false);
 		
 		timer = new Timer();

@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
-import uk.co.jpereira.isu.translators.UnitTranslator;
 import uk.co.jpereira.isu.units.ISUUnit;
+import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.utils.Register;
 import uk.co.jpereira.utils.SharedMemory;
 /**
@@ -15,15 +15,12 @@ import uk.co.jpereira.utils.SharedMemory;
  *
  */
 public class ISUUnits {
-	public static Set<Class<? extends ISUUnit>> retrieveAllUnits(){
+	public static Set<Class<?> > retrieveAllUnits(){
 		Reflections reflections = new Reflections("uk.co.jpereira.isu.units");
-		Set<Class<? extends ISUUnit>> allUnits = reflections.getSubTypesOf(ISUUnit.class);
+		Set<Class<?>> allUnits = reflections.getTypesAnnotatedWith(uk.co.jpereira.isu.units.Unit.class);
 		return allUnits;
 	}
-	public static UnitTranslator<?, ?> retrieveTranslator(Class class1, Class class2){
-		SharedMemory mem = new SharedMemory();
-		return mem.findTranslators(class1, class2);
-	}
+	
 	static{
 		System.out.println("Doing stuff");
 		Register.start_thread();
