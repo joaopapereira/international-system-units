@@ -94,6 +94,14 @@ public class RuleOfThreePanel extends Panel {
 		lowerUnit = new JComboBox<ISUUnit>();
 		lowerUnit.setBounds(10, 183, 111, 20);
 		add(lowerUnit);
+		lowerUnit.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					loadLowerUnitModifiers((ISUUnit)event.getItem());
+				}
+			}
+		});
 		
 		upLeftText = new JTextField();
 		upLeftText.setColumns(10);
