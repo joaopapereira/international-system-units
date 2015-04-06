@@ -15,8 +15,6 @@ public class ISUUnitsTest {
 
 	@Test
 	public void testRetrieveAllUnits() {
-		Set<?> all = ISUUnits.retrieveAllUnits();
-		System.out.println(all);
 	}
 
 }

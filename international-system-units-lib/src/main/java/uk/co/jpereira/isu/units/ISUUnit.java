@@ -4,7 +4,8 @@ package uk.co.jpereira.isu.units;
  * @author Joao Pereira
  *
  */
-public abstract class ISUUnit<Precision> {
+@SuppressWarnings("rawtypes")
+public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision>>{
 	private Precision amountInUnits;
 	private UnitModifier modififerFromUnit;
 	/**
@@ -64,7 +65,9 @@ public abstract class ISUUnit<Precision> {
 		else
 			this.amountInUnits = (Precision)modififerFromUnit.convertToUnit((Double)amount);
 	}
-
+	public void setModifier(UnitModifier modifier){
+		modififerFromUnit = modifier;
+	}
 	/**
 	 * Retrieve the amount of units in the ISU Unit
 	 * @return amount of units
@@ -92,5 +95,12 @@ public abstract class ISUUnit<Precision> {
 		}
 		Precision aux = getAmountToUnit();
 		return (Precision)modifier.convert((Double)aux);
+	}
+	/**
+	 * Compare to units using the names
+	 * @param otherUnit Other unit to compare to
+	 */
+	public int compareTo(ISUUnit otherUnit){
+		return otherUnit.name().compareTo(otherUnit.name());
 	}
 }
