@@ -17,6 +17,7 @@ import org.reflections.Reflections;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units.UnitModifier;
+import uk.co.jpereira.isu.units.UnitType;
 import uk.co.jpereira.utils.Register;
 import uk.co.jpereira.utils.SharedMemory;
 /**
@@ -33,6 +34,27 @@ public class ISUUnits {
 
 		LOGGER.info("Retrieve All Units");
 		for(Class<?> unitType: reflections.getTypesAnnotatedWith(uk.co.jpereira.isu.units.Unit.class)){
+			LOGGER.finer("retrieved :"+ unitType);
+			try {
+				allUnits.add(unitType.newInstance());
+			} catch (InstantiationException | IllegalAccessException e) {
+				LOGGER.severe(e.getMessage());
+			}
+		}
+		List<ISUUnit> result = asSortedList(allUnits);
+		return result;
+	}
+	public static Collection<ISUUnit> retrieveUnits(UnitType type){
+		LOGGER.fine("Retrieve All Units");
+		Reflections reflections = new Reflections("uk.co.jpereira.isu.units");
+		Collection allUnits = new ArrayList();
+
+		LOGGER.info("Retrieve All Units");
+		for(Class<?> unitType: reflections.getTypesAnnotatedWith(uk.co.jpereira.isu.units.Unit.class)){
+			Unit unit = unitType.getAnnotation(uk.co.jpereira.isu.units.Unit.class);
+			if(unit == null || unit.unitType() != type){
+				continue;
+			}
 			LOGGER.finer("retrieved :"+ unitType);
 			try {
 				allUnits.add(unitType.newInstance());

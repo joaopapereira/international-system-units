@@ -16,14 +16,17 @@ import javax.swing.JTextField;
 import uk.co.jpereira.isu.ISUUnits;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
+import uk.co.jpereira.isu.units.UnitType;
 import uk.co.jpereira.views.utils.ComboBoxItem;
 
 import javax.swing.JLabel;
 
 public class UnitConverterPanel extends Panel {
 	private JTextField fromText, toText;
-	private JComboBox typeBox, unitBox, fromBox, toBox;
+	private JComboBox unitBox, fromBox, toBox;
+	private JComboBox<UnitType> typeBox;
 	private JLabel lblType;
+	JButton btnConvert;
 	public UnitConverterPanel(){
 		super();
 		setLayout(null);
@@ -38,13 +41,25 @@ public class UnitConverterPanel extends Panel {
 		add(toText);
 		toText.setColumns(10);
 		
-		typeBox = new JComboBox();
+		typeBox = new JComboBox<UnitType>();
 		typeBox.setBounds(135, 41, 111, 20);
+		for(UnitType ut: UnitType.values()){
+			typeBox.addItem(ut);
+		}
+		typeBox.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					loadUnitComboBox();
+				}
+			}
+		});
 		unitBox = new JComboBox<ComboBoxItem<ISUUnit>>();
 		unitBox.setBounds(137, 78, 109, 20);
 		add(unitBox);
 		add(typeBox);
-		for(ISUUnit unit: ISUUnits.retrieveAllUnits()){
+		for(ISUUnit unit: ISUUnits.retrieveUnits((UnitType) typeBox.getSelectedItem())){
 				unitBox.addItem(new ComboBoxItem<ISUUnit>(unit.toString(), unit));
 		}
 
@@ -56,14 +71,14 @@ public class UnitConverterPanel extends Panel {
 			public void itemStateChanged(ItemEvent event) {
 				if (event.getStateChange() == ItemEvent.SELECTED) {
 					ISUUnit item = ((ComboBoxItem<ISUUnit>)event.getItem()).getValue();
-					fromBox.removeAllItems();
-					toBox.removeAllItems();
 					loadModifiersComboBox(item);
 		        }
 			}
 		});
-
-		loadModifiersComboBox(((ComboBoxItem<ISUUnit>)unitBox.getSelectedItem()).getValue());
+		if(unitBox.getItemCount() == 0){
+			unitBox.setEnabled(false);
+		}
+		
 		
 		fromBox.setBounds(231, 140, 80, 20);
 		add(fromBox);
@@ -71,7 +86,7 @@ public class UnitConverterPanel extends Panel {
 		toBox.setBounds(231, 172, 80, 20);
 		add(toBox);
 		
-		JButton btnConvert = new JButton("Convert");
+		btnConvert = new JButton("Convert");
 		btnConvert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(fromText.getText().length() == 0){
@@ -88,6 +103,10 @@ public class UnitConverterPanel extends Panel {
 		});
 		btnConvert.setBounds(219, 219, 92, 23);
 		add(btnConvert);
+		
+		
+
+		loadUnitComboBox();
 		
 		JLabel lblUnit = new JLabel("Unit");
 		lblUnit.setBounds(81, 81, 46, 14);
@@ -106,11 +125,34 @@ public class UnitConverterPanel extends Panel {
 		add(lblType);
 	}
 	private void loadModifiersComboBox(ISUUnit<?> unit){
-
+		fromBox.removeAllItems();
+		toBox.removeAllItems();
+		if(unit == null){
+			fromBox.setEnabled(false);
+			toBox.setEnabled(false);
+			btnConvert.setEnabled(false);
+			return;
+		}
+		fromBox.setEnabled(true);
+		toBox.setEnabled(true);
+		btnConvert.setEnabled(true);
 		for(UnitModifier mod: UnitModifier.values()){
 			unit.setModifier(mod);
 			fromBox.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
 			toBox.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
+		}
+	}
+	private void loadUnitComboBox(){
+		unitBox.removeAllItems();
+		for(ISUUnit unit: ISUUnits.retrieveUnits((UnitType) typeBox.getSelectedItem())){
+			unitBox.addItem(new ComboBoxItem<ISUUnit>(unit.toString(), unit));
+		}
+		if(unitBox.getItemCount() == 0){
+			unitBox.setEnabled(false);
+			loadModifiersComboBox(null);
+		}else{
+			unitBox.setEnabled(true);
+			loadModifiersComboBox(((ComboBoxItem<ISUUnit>)unitBox.getSelectedItem()).getValue());
 		}
 	}
 }
