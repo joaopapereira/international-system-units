@@ -30,10 +30,10 @@ public class KiloGram extends ISUUnit<Double> {
 
 	@Override
 	public String name() {
-		return new String("g");
+		return new String("Gram");
 	}
 	@Override
 	public String smallName() {
-		return new String("m");
+		return new String("g");
 	}
 }

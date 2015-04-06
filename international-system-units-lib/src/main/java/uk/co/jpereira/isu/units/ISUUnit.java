@@ -83,6 +83,10 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	public String toString(){
 		return new String(modififerFromUnit.toString()+name());
 	}
+
+	public String getSmallName(){
+		return new String(modififerFromUnit.getSmallRepr()+smallName());
+	}
 	public abstract String name();
 	public abstract String smallName();
 	
