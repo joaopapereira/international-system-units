@@ -3,6 +3,7 @@ package uk.co.jpereira.isu.units;
 
 public enum ISDimension {
 	AMOUNT_OF_SUBSTANCE("N"),
+	COMPOSED("", false),
 	DIMENSIONLESS(""),
 	ELECTRIC_CURRENT("I"),
 	LENGTH("L"),
@@ -10,10 +11,19 @@ public enum ISDimension {
 	MASS("M"),
 	THERMODYNAMIC_TEMPERATURE("Θ"),
 	TIME("T");
-	
+
 	private String symbol;
+	private boolean simpleConvertion;
+	public boolean simpleConvertion(){
+		return simpleConvertion;
+	}
 	ISDimension(String symbol){
 		this.symbol = symbol;
+		this.simpleConvertion = true;
+	}
+	ISDimension(String symbol, boolean simpleConvertion){
+		this.symbol = symbol;
+		this.simpleConvertion = simpleConvertion;
 	}
 	public String getSymbol(){
 		return symbol;

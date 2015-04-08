@@ -18,6 +18,7 @@ import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.ISDimension;
+import uk.co.jpereira.isue.exception.UnitNotConvertible;
 import uk.co.jpereira.utils.Register;
 import uk.co.jpereira.utils.RuleOfThree;
 import uk.co.jpereira.utils.SharedMemory;
@@ -55,8 +56,11 @@ public class ISUUnits {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static double unitConvert(ISUUnit unit, UnitModifier from, UnitModifier to, double amount){
+	public static double unitConvert(ISUUnit unit, UnitModifier from, UnitModifier to, double amount) throws UnitNotConvertible{
 		LOGGER.fine("unitConverter(" + unit + ", "+from+", "+ to + ", "+ Double.toString(amount)+")");
+		if(unit.getClass().getAnnotation(uk.co.jpereira.isu.units.Unit.class).dimension() == ISDimension.COMPOSED){
+			throw new UnitNotConvertible(unit);
+		}
 		unit.setModifier(from);
 		unit.setAmount(amount);
 		return (double) unit.convertTo(to);

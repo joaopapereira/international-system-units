@@ -10,6 +10,7 @@ import java.util.Timer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -17,6 +18,7 @@ import uk.co.jpereira.isu.ISUUnits;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.ISDimension;
+import uk.co.jpereira.isue.exception.UnitNotConvertible;
 import uk.co.jpereira.views.MainView;
 import uk.co.jpereira.views.utils.ComboBoxItem;
 
@@ -45,9 +47,10 @@ public class UnitConverterPanel extends Panel {
 		toText.setColumns(10);
 		
 		typeBox = new JComboBox<ISDimension>();
-		typeBox.setBounds(135, 41, 111, 20);
+		typeBox.setBounds(135, 41, 176, 20);
 		for(ISDimension ut: ISDimension.values()){
-			typeBox.addItem(ut);
+			if(ut.simpleConvertion())
+				typeBox.addItem(ut);
 		}
 		typeBox.addItemListener(new ItemListener() {
 			
@@ -59,7 +62,7 @@ public class UnitConverterPanel extends Panel {
 			}
 		});
 		unitBox = new JComboBox<ComboBoxItem<ISUUnit>>();
-		unitBox.setBounds(137, 78, 109, 20);
+		unitBox.setBounds(137, 78, 174, 20);
 		add(unitBox);
 		add(typeBox);
 		for(ISUUnit unit: ISUUnits.retrieveUnits((ISDimension) typeBox.getSelectedItem())){
@@ -93,6 +96,7 @@ public class UnitConverterPanel extends Panel {
 		btnConvert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(fromText.getText().length() == 0){
+					JOptionPane.showMessageDialog(null, "Missing value in from field!", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				double f = Double.parseDouble(fromText.getText());
@@ -101,7 +105,12 @@ public class UnitConverterPanel extends Panel {
 				toUnit = ((ComboBoxItem<UnitModifier>)toBox.getSelectedItem()).getValue();
 				System.out.println("Selected stuff is: " + fromUnit + " -> " + toUnit);
 				ISUUnit myUnit = ((ComboBoxItem<ISUUnit>)unitBox.getSelectedItem()).getValue();
-				toText.setText(Double.toString(ISUUnits.unitConvert(myUnit, fromUnit, toUnit, f)));
+				try {
+					toText.setText(Double.toString(ISUUnits.unitConvert(myUnit, fromUnit, toUnit, f)));
+				} catch (UnitNotConvertible e) {
+					JOptionPane.showMessageDialog(null, "The unit "+ myUnit +" cannot be converted!");
+					return;
+				}
 			}
 		});
 		btnConvert.setBounds(219, 219, 92, 23);
