@@ -26,6 +26,11 @@
     	<artifactId>international-system-units-lib</artifactId>
     	<version>0.0.1-SNAPSHOT</version>
     </dependency>
+    <dependency>
+    	<groupId>net.sourceforge.jeuclid</groupId>
+    	<artifactId>jeuclid-core</artifactId>
+    	<version>3.1.9</version>
+    </dependency>
   </dependencies>
   <build>
         <finalName>${project.artifactId}</finalName>

@@ -14,10 +14,13 @@ import java.util.logging.StreamHandler;
 
 import org.reflections.Reflections;
 
+import uk.co.jpereira.isu.units.BasicUnit;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.ISDimension;
+import uk.co.jpereira.isu.units.derived.DerivedUnit;
+import uk.co.jpereira.isue.exception.MissingParameters;
 import uk.co.jpereira.isue.exception.UnitNotConvertible;
 import uk.co.jpereira.utils.Register;
 import uk.co.jpereira.utils.RuleOfThree;
@@ -66,12 +69,12 @@ public class ISUUnits {
 		return (double) unit.convertTo(to);
 	}
 	@SuppressWarnings("unchecked")
-	public static double ruleOfThree(ISUUnit up, 
+	public static double ruleOfThree(BasicUnit up, 
 										UnitModifier upLeftMod, 
 											  double upLeftAmount,
 										UnitModifier upRightMod, 
 										  	  double upRightAmount,
-								  	 ISUUnit down, 
+								  	BasicUnit down, 
 										UnitModifier downLeftMod, 
 											  double downLeftAmount,
 										UnitModifier downRightMod){
@@ -80,20 +83,31 @@ public class ISUUnits {
 								     down + ", "+downLeftMod+", "+ downLeftAmount + ", "+
 										  ", " + downRightMod +")");
 		double _upLeftAmount, _upRightAmount, _downLeftAmount;
-		ISUUnit unit = (ISUUnit)up.clone();
-		unit.setModifier(upLeftMod);
+		BasicUnit unit = (BasicUnit)up.clone();
+		if(unit instanceof ISUUnit)
+			((ISUUnit)unit).setModifier(upLeftMod);
 		unit.setAmount(upLeftAmount);
 		_upLeftAmount = (double)unit.getAmountToUnit();
-		unit.setModifier(upRightMod);
+		if(unit instanceof ISUUnit)
+			((ISUUnit)unit).setModifier(upRightMod);
 		unit.setAmount(upRightAmount);
 		_upRightAmount = (double)unit.getAmountToUnit();
 		unit = (ISUUnit)down.clone();
-		unit.setModifier(downLeftMod);
+		if(unit instanceof ISUUnit)
+			((ISUUnit)unit).setModifier(downLeftMod);
 		unit.setAmount(downLeftAmount);
-		_downLeftAmount = (double)unit.getAmount();
+		_downLeftAmount = Double.NaN;
+		try {
+			_downLeftAmount = (double)unit.getAmount();
+		} catch (MissingParameters e) {
+			// TODO Auto-generated catch block
+		}
 		double result = RuleOfThree.calculate(_upLeftAmount, _upRightAmount, _downLeftAmount);
 		unit.setAmount(result);
-		return (double) unit.convertTo(downRightMod);
+		if(unit instanceof ISUUnit){
+			return (double) ((ISUUnit)unit).convertTo(downRightMod);
+		}
+		return result;
 	}
 	
 	static{
@@ -111,5 +125,20 @@ public class ISUUnits {
 	  java.util.Collections.sort(list);
 	  return list;
 	}
-	
+	public static Collection<BasicUnit> retrieveDerived(){
+		LOGGER.fine("Retrieve All Derived Units");
+		Reflections reflections = new Reflections("uk.co.jpereira.isu.units.derived");
+		Collection allUnits = new ArrayList();
+
+		for(Class<?> unitType: reflections.getSubTypesOf(uk.co.jpereira.isu.units.derived.DerivedUnit.class)){
+			LOGGER.finer("retrieved :"+ unitType);
+			try {
+				allUnits.add(unitType.newInstance());
+			} catch (InstantiationException | IllegalAccessException e) {
+				LOGGER.severe(e.getMessage());
+			}
+		}
+		List<BasicUnit> result = asSortedList(allUnits);
+		return result;
+	}
 }

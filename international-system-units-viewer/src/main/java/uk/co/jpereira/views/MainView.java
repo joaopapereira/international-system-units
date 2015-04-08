@@ -17,6 +17,7 @@ import uk.co.jpereira.isu.ISUUnits;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Meter;
 import uk.co.jpereira.isu.units.UnitModifier;
+import uk.co.jpereira.views.panels.FormulaePanel;
 import uk.co.jpereira.views.panels.RuleOfThreePanel;
 import uk.co.jpereira.views.panels.UnitConverterPanel;
 
@@ -52,6 +53,7 @@ public class MainView extends JFrame implements Observer{
 		
 		tabbedPane.addTab("Rule of Three", new RuleOfThreePanel());
 		tabbedPane.addTab("Unit Convertion", new UnitConverterPanel());
+		tabbedPane.addTab("Formulae", new FormulaePanel());
 		
 		
 	}

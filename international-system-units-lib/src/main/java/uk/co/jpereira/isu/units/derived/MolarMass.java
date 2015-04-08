@@ -8,7 +8,7 @@ import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isue.exception.MissingParameters;
 
 @Unit(dimension=ISDimension.COMPOSED)
-public class MolarMass extends BasicUnit<Double> implements DerivedUnit {
+public class MolarMass extends DerivedUnit{
 	private KiloGram mass;
 	private Mole mole;
 	public MolarMass(){
@@ -99,6 +99,26 @@ public class MolarMass extends BasicUnit<Double> implements DerivedUnit {
 			calculateUnit();
 		}
 		return getAmountToUnit();
+	}
+	@Override
+	public String calculationFormulae() {
+		String formulae = new String();
+		formulae = "<mrow>                "+
+					"  <mtext>MolarMass</mtext> "+
+					"  <mo>=</mo>         "+
+					"  <mfrac>            "+
+					"    <mrow>           "+
+					"      <mrow>         "+
+					"        <mtext>Mass</mtext>"+
+					"      </mrow>        "+
+					"    </mrow>          "+
+					"    <mrow>           "+
+					"      <mtext>Mole</mtext>  "+
+					"    </mrow>          "+
+					"  </mfrac>           "+
+					"</mrow>";
+			
+		return formulae;
 	}
 
 }
