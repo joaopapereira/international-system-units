@@ -5,7 +5,7 @@ package uk.co.jpereira.isu.units;
  *
  */
 @SuppressWarnings("rawtypes")
-public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision>>{
+public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	private Precision amountInUnits;
 	private UnitModifier modififerFromUnit;
 	/**
@@ -14,6 +14,7 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	 * @param toUnit conversion factor
 	 */
 	public ISUUnit(Precision amount, UnitModifier toUnit){
+		super();
 		if(toUnit == null)
 			this.modififerFromUnit = UnitModifier.Unit;
 		else
@@ -25,6 +26,7 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	 * @param amount Amount of unit
 	 */
 	public ISUUnit(Precision amount){
+		super();
 		this.modififerFromUnit = UnitModifier.Unit;
 		setAmount(amount);
 	}
@@ -51,29 +53,23 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	 */
 	@SuppressWarnings("unchecked")
 	public Precision getAmount(){
-		return (Precision)modififerFromUnit.convert((Double)amountInUnits);
+		return (Precision)modififerFromUnit.convert((Double)super.getAmountToUnit());
 	}
 
 	/**
 	 * Set the amount of units in this object unit
 	 * @return amount of units
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void setAmount(Precision amount){
 		if(modififerFromUnit == UnitModifier.Unit)
-			this.amountInUnits = amount;
+			super.setAmount(amount);
 		else
-			this.amountInUnits = (Precision)modififerFromUnit.convertToUnit((Double)amount);
+			super.setAmount((Precision)modififerFromUnit.convertToUnit((Double)amount));
 	}
 	public void setModifier(UnitModifier modifier){
 		modififerFromUnit = modifier;
-	}
-	/**
-	 * Retrieve the amount of units in the ISU Unit
-	 * @return amount of units
-	 */
-	public Precision getAmountToUnit(){
-		return amountInUnits;
 	}
 
 	/* (non-Javadoc)
@@ -87,13 +83,11 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	public String getSmallName(){
 		return new String(modififerFromUnit.getSmallRepr()+smallName());
 	}
-	public abstract String name();
-	public abstract String smallName();
 	
 	@SuppressWarnings("unchecked")
 	public Precision convertTo(UnitModifier modifier){
 		if(modififerFromUnit == UnitModifier.Unit){
-			return (Precision)modifier.convert((Double)amountInUnits);
+			return (Precision)modifier.convert((Double)super.getAmountToUnit());
 		}else if(modifier == UnitModifier.Unit){
 			return getAmountToUnit();
 		}
@@ -107,16 +101,10 @@ public abstract class ISUUnit<Precision> implements Comparable<ISUUnit<Precision
 	public int compareTo(ISUUnit otherUnit){
 		return name().compareTo(otherUnit.name());
 	}
+	@Override
 	public Object clone(){
-		try {
-			ISUUnit unit = (ISUUnit)this.getClass().newInstance();
-			unit.amountInUnits = amountInUnits;
-			unit.modififerFromUnit = modififerFromUnit;
-			return unit;
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		ISUUnit unit = (ISUUnit)super.clone();
+		unit.modififerFromUnit = modififerFromUnit;
+		return unit;
 	}
 }
