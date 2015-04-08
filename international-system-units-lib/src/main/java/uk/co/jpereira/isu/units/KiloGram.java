@@ -5,6 +5,14 @@ public class KiloGram extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor
 	 * @param amount Amount of unit
+	 * @param modifier Unit modifier
+	 */
+	public KiloGram(Double amount, UnitModifier modifier){
+		super(amount, modifier);
+	}
+	/**
+	 * ISUUnit constructor
+	 * @param modifier Unit modifier
 	 */
 	public KiloGram(UnitModifier modifier){
 		super(0., modifier);
@@ -23,11 +31,6 @@ public class KiloGram extends ISUUnit<Double> {
 		super(UnitModifier.KILO);
 	}
 	
-	@Override
-	public String toString(){
-		return new String("Gram");
-	}
-
 	@Override
 	public String name() {
 		return new String("Gram");

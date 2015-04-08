@@ -51,6 +51,7 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	 * Retrieve the amount of units in this object unit
 	 * @return amount of units
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public Precision getAmount(){
 		return (Precision)modififerFromUnit.convert((Double)super.getAmountToUnit());

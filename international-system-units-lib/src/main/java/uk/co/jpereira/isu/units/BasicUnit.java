@@ -1,18 +1,26 @@
 package uk.co.jpereira.isu.units;
 
-public abstract class BasicUnit<Precision>  implements Comparable<ISUUnit<Precision>>{
+import java.util.logging.Logger;
+
+import uk.co.jpereira.isu.ISUUnits;
+import uk.co.jpereira.isue.exception.MissingParameters;
+
+public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Precision>>{
+	protected final Logger logger; 
 	private Precision amountInUnits;
 	/**
-	 * ISUUnit constructor
+	 * BasicUnit constructor
 	 * @param amount Amount of unit
 	 */
 	public BasicUnit(Precision amount){
+		logger = Logger.getLogger(this.getClass().getPackage().getName());
 		setAmount(amount);
 	}
 	/**
-	 * ISUUnit constructor
+	 * BasicUnit constructor
 	 */
 	public BasicUnit(){
+		logger = Logger.getLogger(this.getClass().getPackage().getName());
 	}
 
 	/**
@@ -23,6 +31,11 @@ public abstract class BasicUnit<Precision>  implements Comparable<ISUUnit<Precis
 	public void setAmount(Precision amount){
 		this.amountInUnits = amount;
 	}
+	/**
+	 * Retrieve the amount of units in the ISU Unit
+	 * @return amount of units
+	 */
+	public abstract Precision getAmount() throws MissingParameters ;
 	/**
 	 * Retrieve the amount of units in the ISU Unit
 	 * @return amount of units
