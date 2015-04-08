@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import uk.co.jpereira.isu.ISUUnits;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isu.units.UnitType;
+import uk.co.jpereira.isu.units.ISDimension;
 import uk.co.jpereira.views.MainView;
 import uk.co.jpereira.views.utils.ComboBoxItem;
 
@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 public class UnitConverterPanel extends Panel {
 	private JTextField fromText, toText;
 	private JComboBox unitBox, fromBox, toBox;
-	private JComboBox<UnitType> typeBox;
+	private JComboBox<ISDimension> typeBox;
 	private JLabel lblType;
 	JButton btnConvert;
 	public UnitConverterPanel(){
@@ -44,9 +44,9 @@ public class UnitConverterPanel extends Panel {
 		add(toText);
 		toText.setColumns(10);
 		
-		typeBox = new JComboBox<UnitType>();
+		typeBox = new JComboBox<ISDimension>();
 		typeBox.setBounds(135, 41, 111, 20);
-		for(UnitType ut: UnitType.values()){
+		for(ISDimension ut: ISDimension.values()){
 			typeBox.addItem(ut);
 		}
 		typeBox.addItemListener(new ItemListener() {
@@ -62,7 +62,7 @@ public class UnitConverterPanel extends Panel {
 		unitBox.setBounds(137, 78, 109, 20);
 		add(unitBox);
 		add(typeBox);
-		for(ISUUnit unit: ISUUnits.retrieveUnits((UnitType) typeBox.getSelectedItem())){
+		for(ISUUnit unit: ISUUnits.retrieveUnits((ISDimension) typeBox.getSelectedItem())){
 				unitBox.addItem(new ComboBoxItem<ISUUnit>(unit.toString(), unit));
 		}
 
@@ -147,7 +147,7 @@ public class UnitConverterPanel extends Panel {
 	}
 	private void loadUnitComboBox(){
 		unitBox.removeAllItems();
-		for(ISUUnit unit: ISUUnits.retrieveUnits((UnitType) typeBox.getSelectedItem())){
+		for(ISUUnit unit: ISUUnits.retrieveUnits((ISDimension) typeBox.getSelectedItem())){
 			unitBox.addItem(new ComboBoxItem<ISUUnit>(unit.toString(), unit));
 		}
 		if(unitBox.getItemCount() == 0){

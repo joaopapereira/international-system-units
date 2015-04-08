@@ -1,6 +1,6 @@
 package uk.co.jpereira.isu.units;
 
-@Unit(unitType=UnitType.TIME)
+@Unit(dimension=ISDimension.TIME)
 public class Second extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor

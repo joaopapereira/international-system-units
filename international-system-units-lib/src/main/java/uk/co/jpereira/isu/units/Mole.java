@@ -1,6 +1,6 @@
 package uk.co.jpereira.isu.units;
 
-@Unit(unitType=UnitType.LUMINOUS_INTENSITY)
+@Unit(dimension=ISDimension.LUMINOUS_INTENSITY)
 public class Mole extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor

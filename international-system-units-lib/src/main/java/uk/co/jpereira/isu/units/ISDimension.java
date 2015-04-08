@@ -1,17 +1,23 @@
 package uk.co.jpereira.isu.units;
 
-import java.util.List;
 
-public enum UnitType {
-	AMOUNT_OF_SUBSTANCE,
-	ELECTRIC_CURRENT,
-	LENGTH,
-	LUMINOUS_INTENSITY,
-	MASS,
-	THERMODYNAMIC_TEMPERATURE,
-	TIME,
-	NO_TYPE;
+public enum ISDimension {
+	AMOUNT_OF_SUBSTANCE("N"),
+	DIMENSIONLESS(""),
+	ELECTRIC_CURRENT("I"),
+	LENGTH("L"),
+	LUMINOUS_INTENSITY("J"),
+	MASS("M"),
+	THERMODYNAMIC_TEMPERATURE("Θ"),
+	TIME("T");
 	
+	private String symbol;
+	ISDimension(String symbol){
+		this.symbol = symbol;
+	}
+	public String getSymbol(){
+		return symbol;
+	}
 	public String toString(){
 		return toCamelCase(super.toString());
 	}

@@ -1,6 +1,6 @@
 package uk.co.jpereira.isu.units;
 
-@Unit(unitType=UnitType.ELECTRIC_CURRENT)
+@Unit(dimension=ISDimension.ELECTRIC_CURRENT)
 public class Ampere extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor

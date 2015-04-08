@@ -1,6 +1,6 @@
 package uk.co.jpereira.isu.units;
 
-@Unit(unitType=UnitType.AMOUNT_OF_SUBSTANCE)
+@Unit(dimension=ISDimension.AMOUNT_OF_SUBSTANCE)
 public class Candela extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor

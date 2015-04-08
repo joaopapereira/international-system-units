@@ -7,5 +7,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Unit {
 
 	public boolean isUnit() default true;
-	public UnitType unitType() default UnitType.NO_TYPE;
+	public ISDimension dimension() default ISDimension.DIMENSIONLESS;
 }

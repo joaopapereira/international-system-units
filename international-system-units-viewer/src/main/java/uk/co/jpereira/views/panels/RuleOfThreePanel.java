@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import uk.co.jpereira.isu.ISUUnits;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isu.units.UnitType;
+import uk.co.jpereira.isu.units.ISDimension;
 
 import javax.swing.JTextField;
 

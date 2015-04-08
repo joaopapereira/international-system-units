@@ -17,7 +17,7 @@ import org.reflections.Reflections;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isu.units.UnitType;
+import uk.co.jpereira.isu.units.ISDimension;
 import uk.co.jpereira.utils.Register;
 import uk.co.jpereira.utils.RuleOfThree;
 import uk.co.jpereira.utils.SharedMemory;
@@ -32,7 +32,7 @@ public class ISUUnits {
 		LOGGER.fine("Retrieve All Units");
 		return retrieveUnits(null);
 	}
-	public static Collection<ISUUnit> retrieveUnits(UnitType type){
+	public static Collection<ISUUnit> retrieveUnits(ISDimension type){
 		LOGGER.fine("Retrieve All Units");
 		Reflections reflections = new Reflections("uk.co.jpereira.isu.units");
 		Collection allUnits = new ArrayList();
@@ -40,7 +40,7 @@ public class ISUUnits {
 		LOGGER.info("Retrieve All Units");
 		for(Class<?> unitType: reflections.getTypesAnnotatedWith(uk.co.jpereira.isu.units.Unit.class)){
 			Unit unit = unitType.getAnnotation(uk.co.jpereira.isu.units.Unit.class);
-			if(unit == null || (unit.unitType() != type && type != null)){
+			if(unit == null || (unit.dimension() != type && type != null)){
 				continue;
 			}
 			LOGGER.finer("retrieved :"+ unitType);

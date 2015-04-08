@@ -1,6 +1,6 @@
 package uk.co.jpereira.isu.units;
 
-@Unit(unitType=UnitType.THERMODYNAMIC_TEMPERATURE)
+@Unit(dimension=ISDimension.THERMODYNAMIC_TEMPERATURE)
 public class Kelvin extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor

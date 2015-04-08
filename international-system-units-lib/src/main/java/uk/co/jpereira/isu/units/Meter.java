@@ -1,6 +1,6 @@
 package uk.co.jpereira.isu.units;
 
-@Unit(unitType=UnitType.LENGTH)
+@Unit(dimension=ISDimension.LENGTH)
 public class Meter extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor

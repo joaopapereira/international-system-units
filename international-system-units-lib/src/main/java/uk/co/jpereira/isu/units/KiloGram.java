@@ -1,6 +1,6 @@
 package uk.co.jpereira.isu.units;
 
-@Unit(unitType=UnitType.MASS)
+@Unit(dimension=ISDimension.MASS)
 public class KiloGram extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor
