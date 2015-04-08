@@ -7,4 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Translator {
 
 	public boolean isTranslator() default true;
+	public String from();
+	public String to();
 }
