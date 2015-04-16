@@ -1,9 +1,9 @@
 package uk.co.jpereira.isu.units;
 
-import java.util.logging.Logger;
-
-import uk.co.jpereira.isu.ISUUnits;
+import org.json.simple.JSONObject;
 import uk.co.jpereira.isue.exception.MissingParameters;
+
+import java.util.logging.Logger;
 
 public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Precision>>{
 	protected final Logger logger; 
@@ -51,12 +51,63 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 		return new String(name());
 	}
 
+	/**
+	 * Retrieve the small name
+	 *
+	 * @return Small name
+	 */
 	public String getSmallName(){
 		return new String(smallName());
 	}
+
+	/**
+	 * Retrieve the name of the the Unit
+	 * @return Name
+	 */
 	public abstract String name();
+
+	/**
+	 * Retrieve JSON representation of the Unit
+	 *
+	 * @return JSON Representation
+	 */
+	@SuppressWarnings("unchecked")
+	public JSONObject getUnitRepresentation() {
+		JSONObject obj = new JSONObject();
+		obj.put("class", getClass());
+		try {
+			obj.put("amount", getAmount());
+		} catch (MissingParameters e) {
+			obj.put("amount", null);
+		}
+		return obj;
+	}
+
+	/**
+	 * Retrieve JSON representation of the Unit
+	 *
+	 * @return JSON Representation
+	 */
+	public void setUnitRepresentation(JSONObject object) {
+		setAmount((Precision) object.get("amount"));
+	}
+
+	/**
+	 * Retrieve the abbreviated name of the unit
+	 * @return
+	 */
 	public abstract String smallName();
 
+	/**
+	 * Retrieve the value and the
+	 */
+	public String getValueWithUnit() {
+		try {
+			return new String(getAmount() + "(" + smallName() + ")");
+		} catch (MissingParameters e) {
+			return new String("(" + smallName() + ")");
+		}
+	}
 	/**
 	 * Compare to units using the names
 	 * @param otherUnit Other unit to compare to

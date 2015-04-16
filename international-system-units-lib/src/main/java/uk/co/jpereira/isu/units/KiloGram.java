@@ -28,7 +28,7 @@ public class KiloGram extends ISUUnit<Double> {
 	 * ISUUnit constructor
 	 */
 	public KiloGram(){
-		super(UnitModifier.KILO);
+		super(0., UnitModifier.KILO);
 	}
 	
 	@Override

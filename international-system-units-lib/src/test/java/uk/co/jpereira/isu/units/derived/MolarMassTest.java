@@ -1,20 +1,18 @@
 package uk.co.jpereira.isu.units.derived;
 
-import static org.junit.Assert.*;
-
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import uk.co.jpereira.isu.units.KiloGram;
 import uk.co.jpereira.isu.units.Mole;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isue.exception.MissingParameters;
+
+import static org.junit.Assert.*;
 
 public class MolarMassTest {
 	@BeforeClass
@@ -146,5 +144,35 @@ public class MolarMassTest {
 	public void testGetNameWithModifier(){
 		MolarMass molarMass = new MolarMass(new KiloGram(20.5, UnitModifier.Unit), new Mole(5.1,UnitModifier.YOTTA));
 		assertEquals("Small name should be Gram/Mole", "Gram/Mole", molarMass.name());
+	}
+
+	@Test
+	public void testGetUnitRepresentation() throws ParseException {
+		MolarMass molarMass = new MolarMass(new KiloGram(20.5, UnitModifier.Unit), new Mole(5.1, UnitModifier.YOTTA));
+		String repr = "{\"amount\": 4.019607843137255, \"subunits\": [{\"amount\": 20.5, \"unit_mod\": \"g\"}, {\"amount\": 5.1, \"unit_mod\": \"Ymol\"}]}";
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(repr);
+		obj.put("class", MolarMass.class);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(0)).put("class", KiloGram.class);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(0)).put("unit_mod", UnitModifier.Unit);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("class", Mole.class);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("unit_mod", UnitModifier.YOTTA);
+		assertEquals("Compared representation", obj, molarMass.getUnitRepresentation());
+	}
+
+	@Test
+	public void testSetUnitRepresentation() throws ParseException, MissingParameters {
+		MolarMass molarMass = new MolarMass(new KiloGram(20.5, UnitModifier.Unit), new Mole(5.1, UnitModifier.YOTTA));
+		String repr = "{\"amount\": 4.019607843137255, \"subunits\": [{\"amount\": 20.5, \"unit_mod\": \"g\"}, {\"amount\": 5.1, \"unit_mod\": \"Ymol\"}]}";
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(repr);
+		obj.put("class", MolarMass.class);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(0)).put("class", KiloGram.class);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(0)).put("unit_mod", UnitModifier.Unit);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("class", Mole.class);
+		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("unit_mod", UnitModifier.YOTTA);
+		MolarMass m1 = new MolarMass();
+		m1.setUnitRepresentation(obj);
+		assertTrue("Compared representation", m1.equals(molarMass));
 	}
 }

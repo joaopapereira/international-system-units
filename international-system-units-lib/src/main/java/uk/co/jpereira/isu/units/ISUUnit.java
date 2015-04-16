@@ -1,12 +1,13 @@
 package uk.co.jpereira.isu.units;
 
+import org.json.simple.JSONObject;
+
 /**
  * @author Joao Pereira
  *
  */
 @SuppressWarnings("rawtypes")
 public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
-	private Precision amountInUnits;
 	private UnitModifier modififerFromUnit;
 	/**
 	 * ISUUnit constructor
@@ -54,6 +55,8 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	@Override
 	@SuppressWarnings("unchecked")
 	public Precision getAmount(){
+		if (super.getAmountToUnit() == null)
+			return null;
 		return (Precision)modififerFromUnit.convert((Double)super.getAmountToUnit());
 	}
 
@@ -64,7 +67,7 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setAmount(Precision amount){
-		if(modififerFromUnit == UnitModifier.Unit)
+		if (modififerFromUnit == UnitModifier.Unit || amount == null)
 			super.setAmount(amount);
 		else
 			super.setAmount((Precision)modififerFromUnit.convertToUnit((Double)amount));
@@ -107,5 +110,30 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 		ISUUnit unit = (ISUUnit)super.clone();
 		unit.modififerFromUnit = modififerFromUnit;
 		return unit;
+	}
+
+	/**
+	 * Retrieve JSON representation of the Unit
+	 *
+	 * @return JSON Representation
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public JSONObject getUnitRepresentation() {
+		JSONObject obj = super.getUnitRepresentation();
+		obj.put("unit_mod", modififerFromUnit);
+		return obj;
+	}
+
+	/**
+	 * Retrieve JSON representation of the Unit
+	 *
+	 * @return JSON Representation
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public void setUnitRepresentation(JSONObject object) {
+		modififerFromUnit = (UnitModifier) object.get("unit_mod");
+		super.setUnitRepresentation(object);
 	}
 }

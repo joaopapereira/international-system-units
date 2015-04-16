@@ -10,6 +10,7 @@ public abstract class DerivedUnit extends BasicUnit<Double>{
 	public DerivedUnit(double amount){
 		super(amount);
 	}
-	protected abstract double calculateUnit()  throws MissingParameters;
+
+	public abstract double calculateUnit() throws MissingParameters;
 	public abstract String calculationFormulae();
 }
