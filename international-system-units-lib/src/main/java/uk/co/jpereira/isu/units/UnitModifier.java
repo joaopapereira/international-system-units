@@ -70,6 +70,14 @@ public enum UnitModifier {
 		return smallRepr;
 	}
 	/**
+	 * Retrieve the small representation
+	 * @return String with the small representation
+	 */
+	public String getSmallReprMathML() {
+		return "<mtext>" + smallRepr + "</mtext>";
+	}
+
+	/**
 	 * Retrieve the correct modifier
 	 * Can use the full name or the small representation
 	 * @param name Name of the modifier

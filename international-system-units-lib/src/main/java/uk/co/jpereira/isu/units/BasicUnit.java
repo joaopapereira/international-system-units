@@ -3,9 +3,11 @@ package uk.co.jpereira.isu.units;
 import org.json.simple.JSONObject;
 import uk.co.jpereira.isue.exception.MissingParameters;
 
+import java.rmi.server.UID;
 import java.util.logging.Logger;
 
 public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Precision>>{
+	protected final static UID classId = new UID();
 	protected final Logger logger; 
 	private Precision amountInUnits;
 	/**
@@ -20,6 +22,7 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 	 * BasicUnit constructor
 	 */
 	public BasicUnit(){
+
 		logger = Logger.getLogger(this.getClass().getPackage().getName());
 	}
 
@@ -43,6 +46,15 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 	public Precision getAmountToUnit(){
 		return amountInUnits;
 	}
+
+	/**
+	 * Retrieve the Unit Identifier
+	 *
+	 * @return Unit Identifier
+	 */
+	public UID uid() {
+		return classId;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -58,6 +70,15 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 	 */
 	public String getSmallName(){
 		return new String(smallName());
+	}
+
+	/**
+	 * Retrieve the small name
+	 *
+	 * @return Small name
+	 */
+	public String getSmallNameMathML() {
+		return new String("<mtext>" + smallName() + "</mtext>");
 	}
 
 	/**
@@ -108,6 +129,21 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 			return new String("(" + smallName() + ")");
 		}
 	}
+
+	/**
+	 * Retrieve the value and the
+	 */
+	public String getValueWithUnitMathML() {
+
+		try {
+			//return new String(getAmount() + "(" + smallName() + ")");
+			return new String("<mtext>" + getAmount() + " " + getSmallNameMathML() + "</mtext>");
+		} catch (MissingParameters e) {
+			//return new String("(" + smallName() + ")");
+			return new String("<mtext>" + getSmallNameMathML() + "</mtext>");
+		}
+	}
+
 	/**
 	 * Compare to units using the names
 	 * @param otherUnit Other unit to compare to

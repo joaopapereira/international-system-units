@@ -10,7 +10,7 @@ import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.derived.DerivedUnit;
 import uk.co.jpereira.isue.exception.MissingParameters;
 import uk.co.jpereira.views.MainView;
-import uk.co.jpereira.views.utils.ComboBoxItem;
+import uk.co.jpereira.views.utils.BasicUnitComboBox;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -26,7 +26,7 @@ import java.util.List;
 
 class ArgumentClass extends JPanel {
 	private BasicUnit unit;
-	JComboBox<ComboBoxItem<UnitModifier>> unitModifierCombo;
+	BasicUnitComboBox unitModifierCombo;
 	JTextField amountField;
 
 	public ArgumentClass(JPanel parent, int yStart, JSONObject unit) {
@@ -34,7 +34,8 @@ class ArgumentClass extends JPanel {
 		JLabel label = new JLabel("Amount");
 		amountField = new JTextField();
 		JLabel lblUnitName = new JLabel(unit.toString());
-		unitModifierCombo = new JComboBox<ComboBoxItem<UnitModifier>>();
+		unitModifierCombo = new BasicUnitComboBox();
+		unitModifierCombo.setPreferredSize(new Dimension(70, 20));
 		add(label);
 
 		add(amountField);
@@ -52,7 +53,7 @@ class ArgumentClass extends JPanel {
 				ISUUnit k = (ISUUnit) ((ISUUnit) this.unit).clone();
 				for (UnitModifier mod : UnitModifier.values()) {
 					k.setModifier(mod);
-					unitModifierCombo.addItem(new ComboBoxItem<>(k.toString(), mod));
+					unitModifierCombo.addItem(k);
 				}
 				add(unitModifierCombo);
 			}
@@ -66,7 +67,7 @@ class ArgumentClass extends JPanel {
 
 	public BasicUnit getUnit() {
 		if (!(this.unit instanceof DerivedUnit)) {
-			((ISUUnit) unit).setModifier((UnitModifier) ((ComboBoxItem) unitModifierCombo.getSelectedItem()).getValue());
+			((ISUUnit) unit).setModifier(unitModifierCombo.getSelectedModifier());
 		}
 		if (amountField.getText().length() > 0)
 			unit.setAmount(Double.parseDouble(amountField.getText()));
@@ -83,15 +84,16 @@ public class FormulaePanel extends JPanel {
 	JPanel formulaeAttributes;
 	private JTextField textField_1;
 	private List<ArgumentClass> arguments;
+
 	public FormulaePanel() {
 		setLayout(null);
 		setSize(MainView.contentSize);
 		arguments = new ArrayList();
 
 		tree = new JTree();
-		tree.setBounds(0, 0, 150, (int)MainView.contentSize.getHeight());
+		tree.setBounds(0, 0, 150, (int) MainView.contentSize.getHeight());
 
-		tree.setPreferredSize(new Dimension(150, (int)MainView.contentSize.getHeight()-50));
+		tree.setPreferredSize(new Dimension(150, (int) MainView.contentSize.getHeight() - 50));
 		JScrollPane allFormulae = new JScrollPane(tree, 
 												JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 												JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

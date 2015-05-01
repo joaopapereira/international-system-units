@@ -76,6 +76,10 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 		modififerFromUnit = modifier;
 	}
 
+	public UnitModifier getModifier() {
+		return modififerFromUnit;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -86,6 +90,15 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 
 	public String getSmallName(){
 		return new String(modififerFromUnit.getSmallRepr()+smallName());
+	}
+
+	/**
+	 * Retrieve the small name
+	 *
+	 * @return Small name
+	 */
+	public String getSmallNameMathML() {
+		return new String("<mtext>" + getSmallName() + "</mtext>");
 	}
 	
 	@SuppressWarnings("unchecked")

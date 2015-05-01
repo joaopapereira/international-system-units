@@ -2,6 +2,7 @@ package uk.co.jpereira.isu.units;
 
 
 public enum ISDimension {
+	AREA("A"),
 	AMOUNT_OF_SUBSTANCE("N"),
 	COMPOSED("", false),
 	DIMENSIONLESS(""),
@@ -10,7 +11,8 @@ public enum ISDimension {
 	LUMINOUS_INTENSITY("J"),
 	MASS("M"),
 	THERMODYNAMIC_TEMPERATURE("Θ"),
-	TIME("T");
+	TIME("T"),
+	VOLUME("V");
 
 	private String symbol;
 	private boolean simpleConvertion;

@@ -24,10 +24,7 @@ public class Second extends ISUUnit<Double> {
 	public Second(UnitModifier toUnit){
 		super(0., toUnit);
 	}
-	/**
-	 * ISUUnit constructor
-	 * @param toUnit conversion factor
-	 */
+
 	public Second(){
 		super(0., UnitModifier.Unit);
 	}

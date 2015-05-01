@@ -1,36 +1,27 @@
 package uk.co.jpereira.views.panels;
 
-import java.awt.Panel;
+import uk.co.jpereira.isu.ISUUnits;
+import uk.co.jpereira.isu.units.BasicUnit;
+import uk.co.jpereira.isu.units.ISUUnit;
+import uk.co.jpereira.isu.units.UnitModifier;
+import uk.co.jpereira.isu.units.derived.DerivedUnit;
+import uk.co.jpereira.views.MainView;
+import uk.co.jpereira.views.utils.BasicUnitComboBox;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
-import uk.co.jpereira.views.MainView;
-
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-
-import uk.co.jpereira.isu.ISUUnits;
-import uk.co.jpereira.isu.units.ISUUnit;
-import uk.co.jpereira.isu.units.BasicUnit;
-import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isu.units.ISDimension;
-import uk.co.jpereira.isu.units.derived.DerivedUnit;
-
-import javax.swing.JTextField;
-
-import uk.co.jpereira.views.utils.ComboBoxItem;
-
-import javax.swing.JButton;
 
 public class RuleOfThreePanel extends Panel {
 	private JTextField upLeftText;
 	private JTextField lowLeftText;
 	private JTextField upRightText;
 	private JTextField lowRightText;
-	private JComboBox<BasicUnit> upperUnit, lowerUnit; 
-	JComboBox<ComboBoxItem> upLeftUnitModifier, lowLeftUnitModifier, upRightUnitModifier, lowRightUnitModifier;
+	private JComboBox<BasicUnit> upperUnit, lowerUnit;
+	BasicUnitComboBox upLeftUnitModifier, lowLeftUnitModifier, upRightUnitModifier, lowRightUnitModifier;
 	public RuleOfThreePanel(){
 		super();
 		createInterface();
@@ -69,8 +60,10 @@ public class RuleOfThreePanel extends Panel {
 		ISUUnit _unit = (ISUUnit)unit.clone();
 		for(UnitModifier mod: UnitModifier.values()){
 			_unit.setModifier(mod);
-			upLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
-			upRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			//upLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			upLeftUnitModifier.addItem(_unit);
+			//upRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			upRightUnitModifier.addItem(_unit);
 		}
 	}
 	private void loadLowerUnitModifiers(final BasicUnit<?> unit){
@@ -88,8 +81,10 @@ public class RuleOfThreePanel extends Panel {
 		ISUUnit _unit = (ISUUnit)unit.clone();
 		for(UnitModifier mod: UnitModifier.values()){
 			_unit.setModifier(mod);
-			lowLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
-			lowRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			//lowLeftUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			//lowRightUnitModifier.addItem(new ComboBoxItem<UnitModifier>(_unit.getSmallName(), mod));
+			lowLeftUnitModifier.addItem(_unit);
+			lowRightUnitModifier.addItem(_unit);
 		}
 	}
 	
@@ -142,20 +137,20 @@ public class RuleOfThreePanel extends Panel {
 		lowRightText.setColumns(10);
 		lowRightText.setBounds(405, 183, 86, 20);
 		add(lowRightText);
-		
-		upLeftUnitModifier = new JComboBox<ComboBoxItem>();
+
+		upLeftUnitModifier = new BasicUnitComboBox();
 		upLeftUnitModifier.setBounds(224, 135, 80, 20);
 		add(upLeftUnitModifier);
-		
-		lowLeftUnitModifier = new JComboBox<ComboBoxItem>();
+
+		lowLeftUnitModifier = new BasicUnitComboBox();
 		lowLeftUnitModifier.setBounds(224, 183, 80, 20);
 		add(lowLeftUnitModifier);
-		
-		upRightUnitModifier = new JComboBox<ComboBoxItem>();
+
+		upRightUnitModifier = new BasicUnitComboBox();
 		upRightUnitModifier.setBounds(492, 135, 80, 20);
 		add(upRightUnitModifier);
-		
-		lowRightUnitModifier = new JComboBox<ComboBoxItem>();
+
+		lowRightUnitModifier = new BasicUnitComboBox();
 		lowRightUnitModifier.setBounds(492, 183, 80, 20);
 		add(lowRightUnitModifier);
 		
@@ -203,13 +198,13 @@ public class RuleOfThreePanel extends Panel {
 					lowLeftText.requestFocus();
 					return;
 				}
-				lowRightText.setText( Double.toString(
-					ISUUnits.ruleOfThree((BasicUnit)upperUnit.getSelectedItem(), 
-							(UnitModifier)((ComboBoxItem)(upLeftUnitModifier.getSelectedItem())).getValue(), leftUp, 
-							(UnitModifier)((ComboBoxItem)(upRightUnitModifier.getSelectedItem())).getValue(), rightUp, 
-										(BasicUnit)lowerUnit.getSelectedItem(), 
-							(UnitModifier)((ComboBoxItem)(lowLeftUnitModifier.getSelectedItem())).getValue(), leftDown, 
-							(UnitModifier)((ComboBoxItem)(lowRightUnitModifier.getSelectedItem())).getValue())));
+				lowRightText.setText(Double.toString(
+						ISUUnits.ruleOfThree((BasicUnit) upperUnit.getSelectedItem(),
+								upLeftUnitModifier.getSelectedModifier(), leftUp,
+								upRightUnitModifier.getSelectedModifier(), rightUp,
+								(BasicUnit) lowerUnit.getSelectedItem(),
+								lowLeftUnitModifier.getSelectedModifier(), leftDown,
+								lowRightUnitModifier.getSelectedModifier())));
 			}
 		});
 	}

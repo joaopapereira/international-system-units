@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Unit {
 
-	public boolean isUnit() default true;
-	public ISDimension dimension() default ISDimension.DIMENSIONLESS;
+	boolean isUnit() default true;
+
+	ISDimension dimension() default ISDimension.DIMENSIONLESS;
 }

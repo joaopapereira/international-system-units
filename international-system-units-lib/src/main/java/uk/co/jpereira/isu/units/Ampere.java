@@ -31,6 +31,7 @@ public class Ampere extends ISUUnit<Double> {
 	public Ampere(){
 		super(0., UnitModifier.Unit);
 	}
+
 	@Override
 	public String name() {
 		return new String("Ampere");

@@ -182,16 +182,16 @@ public class MolarMass extends DerivedUnit{
 			mole = this.mole.getValueWithUnit();
 		String formulae = new String();
 		formulae = "<mrow>                " +
-				"  <mtext>" + molarMass + "</mtext> "+
+				"  <mtext>" + molarMass + "</mtext> " +
 					"  <mo>=</mo>         "+
 					"  <mfrac>            " +
 				"    <mrow>           " +
 				"      <mrow>         " +
-				"        <mtext>" + mass + "</mtext>"+
+				"        <mtext>" + mass + "</mtext>" +
 					"      </mrow>        " +
 				"    </mrow>          " +
 				"    <mrow>           " +
-				"      <mtext>" + mole + "</mtext>  "+
+				"      <mtext>" + mole + "</mtext>  " +
 					"    </mrow>          "+
 					"  </mfrac>           "+
 					"</mrow>";

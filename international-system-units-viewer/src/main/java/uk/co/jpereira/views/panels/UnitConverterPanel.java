@@ -1,32 +1,25 @@
 package uk.co.jpereira.views.panels;
 
-import java.awt.Panel;
+import uk.co.jpereira.isu.ISUUnits;
+import uk.co.jpereira.isu.units.ISDimension;
+import uk.co.jpereira.isu.units.ISUUnit;
+import uk.co.jpereira.isu.units.UnitModifier;
+import uk.co.jpereira.isue.exception.UnitNotConvertible;
+import uk.co.jpereira.views.MainView;
+import uk.co.jpereira.views.utils.BasicUnitComboBox;
+import uk.co.jpereira.views.utils.ComboBoxItem;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Set;
-import java.util.Timer;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import uk.co.jpereira.isu.ISUUnits;
-import uk.co.jpereira.isu.units.ISUUnit;
-import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isu.units.ISDimension;
-import uk.co.jpereira.isue.exception.UnitNotConvertible;
-import uk.co.jpereira.views.MainView;
-import uk.co.jpereira.views.utils.ComboBoxItem;
-
-import javax.swing.JLabel;
 
 public class UnitConverterPanel extends Panel {
 	private JTextField fromText, toText;
-	private JComboBox unitBox, fromBox, toBox;
+	private BasicUnitComboBox fromBox, toBox;
+	private JComboBox<ComboBoxItem<ISUUnit>> unitBox;
 	private JComboBox<ISDimension> typeBox;
 	private JLabel lblType;
 	JButton btnConvert;
@@ -66,17 +59,18 @@ public class UnitConverterPanel extends Panel {
 		add(unitBox);
 		add(typeBox);
 		for(ISUUnit unit: ISUUnits.retrieveUnits((ISDimension) typeBox.getSelectedItem())){
-				unitBox.addItem(new ComboBoxItem<ISUUnit>(unit.toString(), unit));
+			unitBox.addItem(new ComboBoxItem<>(unit.name(), unit));
 		}
 
-		fromBox = new JComboBox<ComboBoxItem<UnitModifier>>();
-		toBox = new JComboBox<ComboBoxItem<UnitModifier>>();
+		fromBox = new BasicUnitComboBox();
+		toBox = new BasicUnitComboBox();
 		unitBox.addItemListener(new ItemListener() {
 			
 			@Override
 			public void itemStateChanged(ItemEvent event) {
 				if (event.getStateChange() == ItemEvent.SELECTED) {
 					ISUUnit item = ((ComboBoxItem<ISUUnit>)event.getItem()).getValue();
+					//ISUUnit item = (ISUUnit)event.getItem();
 					loadModifiersComboBox(item);
 		        }
 			}
@@ -101,10 +95,10 @@ public class UnitConverterPanel extends Panel {
 				}
 				double f = Double.parseDouble(fromText.getText());
 				UnitModifier fromUnit, toUnit;
-				fromUnit = ((ComboBoxItem<UnitModifier>)fromBox.getSelectedItem()).getValue();
-				toUnit = ((ComboBoxItem<UnitModifier>)toBox.getSelectedItem()).getValue();
+				fromUnit = fromBox.getSelectedModifier();
+				toUnit = toBox.getSelectedModifier();
 				System.out.println("Selected stuff is: " + fromUnit + " -> " + toUnit);
-				ISUUnit myUnit = ((ComboBoxItem<ISUUnit>)unitBox.getSelectedItem()).getValue();
+				ISUUnit myUnit = ((ISUUnit) unitBox.getSelectedItem());
 				try {
 					toText.setText(Double.toString(ISUUnits.unitConvert(myUnit, fromUnit, toUnit, f)));
 				} catch (UnitNotConvertible e) {
@@ -150,21 +144,21 @@ public class UnitConverterPanel extends Panel {
 		btnConvert.setEnabled(true);
 		for(UnitModifier mod: UnitModifier.values()){
 			unit.setModifier(mod);
-			fromBox.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
-			toBox.addItem(new ComboBoxItem<UnitModifier>(unit.getSmallName(), mod));
+			fromBox.addItem(unit);
+			toBox.addItem(unit);
 		}
 	}
 	private void loadUnitComboBox(){
 		unitBox.removeAllItems();
 		for(ISUUnit unit: ISUUnits.retrieveUnits((ISDimension) typeBox.getSelectedItem())){
-			unitBox.addItem(new ComboBoxItem<ISUUnit>(unit.toString(), unit));
+			unitBox.addItem(new ComboBoxItem<>(unit.name(), unit));
 		}
 		if(unitBox.getItemCount() == 0){
 			unitBox.setEnabled(false);
 			loadModifiersComboBox(null);
 		}else{
 			unitBox.setEnabled(true);
-			loadModifiersComboBox(((ComboBoxItem<ISUUnit>)unitBox.getSelectedItem()).getValue());
+			loadModifiersComboBox((ISUUnit) ((ComboBoxItem) unitBox.getSelectedItem()).getValue());
 		}
 	}
 }
