@@ -1,14 +1,15 @@
 package uk.co.jpereira.isu;
 
 import org.reflections.Reflections;
+import uk.co.jpereira.isu.exception.MissingParameters;
+import uk.co.jpereira.isu.exception.UnitNotConvertible;
 import uk.co.jpereira.isu.units.*;
-import uk.co.jpereira.isue.exception.MissingParameters;
-import uk.co.jpereira.isue.exception.UnitNotConvertible;
-import uk.co.jpereira.utils.Register;
-import uk.co.jpereira.utils.RuleOfThree;
+import uk.co.jpereira.isu.utils.Register;
+import uk.co.jpereira.isu.utils.RuleOfThree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 /**
@@ -17,14 +18,17 @@ import java.util.logging.Logger;
  *
  */
 public class ISUUnits {
-	private final static Logger LOGGER = Logger.getLogger(ISUUnits.class.getPackage().getName()); 
+	private final static Logger LOGGER = Logger.getLogger(ISUUnits.class.getPackage().getName());
+	private final static Reflections allUnitsReflection = new Reflections("uk.co.jpereira.isu.units");
+	private final static Reflections allDerivedUnitsReflection = new Reflections("uk.co.jpereira.isu.units.derived");
+	private final static Reflections allClassesReflection = new Reflections("uk.co.jpereira");
 	public static Collection<ISUUnit> retrieveAllUnits(){
 		LOGGER.fine("Retrieve All Units");
 		return retrieveUnits(null);
 	}
 	public static Collection<ISUUnit> retrieveUnits(ISDimension type){
 		LOGGER.fine("Retrieve All Units");
-		Reflections reflections = new Reflections("uk.co.jpereira.isu.units");
+		Reflections reflections = allUnitsReflection;
 		Collection allUnits = new ArrayList();
 
 		LOGGER.info("Retrieve All Units");
@@ -117,7 +121,7 @@ public class ISUUnits {
 	}
 	public static Collection<BasicUnit> retrieveDerived(){
 		LOGGER.fine("Retrieve All Derived Units");
-		Reflections reflections = new Reflections("uk.co.jpereira.isu.units.derived");
+		Reflections reflections = allDerivedUnitsReflection;
 		Collection allUnits = new ArrayList();
 
 		for(Class<?> unitType: reflections.getSubTypesOf(uk.co.jpereira.isu.units.derived.DerivedUnit.class)){
@@ -129,6 +133,33 @@ public class ISUUnits {
 			}
 		}
 		List<BasicUnit> result = asSortedList(allUnits);
+		return result;
+	}
+
+	public static HashMap<String, List<Formulae>> getFormulae() {
+		Reflections reflections = allClassesReflection;
+		HashMap<String, List<Formulae>> result = new HashMap<String, List<Formulae>>();
+
+		for (Class<?> formulae : reflections.getSubTypesOf(Formulae.class)) {
+			LOGGER.severe("Formulae :" + formulae);
+			try {
+				LOGGER.severe("t0");
+				Formulae form = (Formulae) formulae.newInstance();
+				LOGGER.severe("t1");
+				String pckName = form.getPackageName();
+				LOGGER.severe("t2");
+				if (!result.containsKey(pckName)) {
+					result.put(pckName, new ArrayList<Formulae>());
+				}
+				LOGGER.severe("t3");
+				result.get(pckName).add(form);
+			} catch (InstantiationException | IllegalAccessException e) {
+				LOGGER.severe(e.getMessage());
+			}
+		}
+		for (String key : result.keySet()) {
+			result.put(key, asSortedList(result.get(key)));
+		}
 		return result;
 	}
 }

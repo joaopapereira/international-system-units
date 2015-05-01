@@ -2,10 +2,10 @@ package uk.co.jpereira.isu.translators;
 
 import org.junit.AfterClass;
 import org.junit.Test;
+import uk.co.jpereira.isu.exception.translator.InvalidUnit;
 import uk.co.jpereira.isu.units.KiloGram;
 import uk.co.jpereira.isu.units.Mole;
 import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isue.exception.translator.InvalidUnit;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;

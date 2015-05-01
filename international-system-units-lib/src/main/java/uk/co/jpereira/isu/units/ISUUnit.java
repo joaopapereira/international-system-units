@@ -1,6 +1,7 @@
 package uk.co.jpereira.isu.units;
 
 import org.json.simple.JSONObject;
+import uk.co.jpereira.isu.exception.MissingParameters;
 
 /**
  * @author Joao Pereira
@@ -132,8 +133,8 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public JSONObject getUnitRepresentation() {
-		JSONObject obj = super.getUnitRepresentation();
+	public JSONObject getRepresentation() {
+		JSONObject obj = super.getRepresentation();
 		obj.put("unit_mod", modififerFromUnit);
 		return obj;
 	}
@@ -145,8 +146,13 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public void setUnitRepresentation(JSONObject object) {
+	public void loadFromRepresentation(JSONObject object) {
 		modififerFromUnit = (UnitModifier) object.get("unit_mod");
-		super.setUnitRepresentation(object);
+		super.loadFromRepresentation(object);
+	}
+
+	@Override
+	public double solve() throws MissingParameters {
+		return 0;
 	}
 }

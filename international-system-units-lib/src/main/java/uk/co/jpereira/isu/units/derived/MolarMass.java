@@ -2,11 +2,11 @@ package uk.co.jpereira.isu.units.derived;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import uk.co.jpereira.isu.exception.MissingParameters;
 import uk.co.jpereira.isu.units.ISDimension;
 import uk.co.jpereira.isu.units.KiloGram;
 import uk.co.jpereira.isu.units.Mole;
 import uk.co.jpereira.isu.units.Unit;
-import uk.co.jpereira.isue.exception.MissingParameters;
 
 @Unit(dimension=ISDimension.COMPOSED)
 public class MolarMass extends DerivedUnit{
@@ -66,7 +66,7 @@ public class MolarMass extends DerivedUnit{
 		return mass.getSmallName()+ "/" + mole.smallName();
 	}
 	@Override
-	public double calculateUnit() throws MissingParameters {
+	public double solve() throws MissingParameters {
 		double result = Double.NaN;
 		Double currentAmount = getAmountToUnit();
 		if (currentAmount != null && !currentAmount.isNaN() && mass != null && mole != null){
@@ -99,7 +99,7 @@ public class MolarMass extends DerivedUnit{
 	}
 	public KiloGram getMass() throws MissingParameters {
 		if(mass == null){
-			calculateUnit();
+			solve();
 		}
 		return mass;
 	}
@@ -108,19 +108,34 @@ public class MolarMass extends DerivedUnit{
 	}
 	public Mole getMole() throws MissingParameters {
 		if(mole == null){
-			calculateUnit();
+			solve();
 		}
 		return mole;
 	}
 	public void setMole(Mole mole) {
 		this.mole = mole;
 	}
+
+	@Override
+	public Object clone() {
+		MolarMass newObject = (MolarMass) super.clone();
+		if (mole == null)
+			newObject.mole = null;
+		else
+			newObject.mole = (Mole) mole.clone();
+		if (mass == null)
+			newObject.mass = null;
+		else
+			newObject.mass = (KiloGram) mass.clone();
+		return newObject;
+	}
+
 	@Override
 	public Double getAmount() throws MissingParameters {
 		if (getAmountToUnit() == null)
 			return null;
 		//if(getAmountToUnit().isNaN()){
-		calculateUnit();
+		solve();
 		//}
 		return getAmountToUnit();
 	}
@@ -131,8 +146,8 @@ public class MolarMass extends DerivedUnit{
 	 * @return JSON Representation
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONObject getUnitRepresentation() {
-		JSONObject obj = super.getUnitRepresentation();
+	public JSONObject getRepresentation() {
+		JSONObject obj = super.getRepresentation();
 		JSONArray list = new JSONArray();
 		KiloGram m = mass;
 		Mole mo = mole;
@@ -140,8 +155,8 @@ public class MolarMass extends DerivedUnit{
 			m = new KiloGram();
 		if (mo == null)
 			mo = new Mole();
-		list.add(m.getUnitRepresentation());
-		list.add(mo.getUnitRepresentation());
+		list.add(m.getRepresentation());
+		list.add(mo.getRepresentation());
 		obj.put("subunits", list);
 		return obj;
 	}
@@ -152,26 +167,26 @@ public class MolarMass extends DerivedUnit{
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public void setUnitRepresentation(JSONObject object) {
-		super.setUnitRepresentation(object);
-		for (Object obj : (JSONArray) object.get("subunits")) {
+	public void loadFromRepresentation(JSONObject object) {
+		super.loadFromRepresentation(object);
+		for (Object obj : (JSONArray) object.get(SUBUNITS)) {
 			JSONObject _obj = (JSONObject) obj;
 			System.out.println(_obj);
-			if (KiloGram.class == _obj.get("class")) {
+			if (KiloGram.class == _obj.get(CLASS)) {
 				mass = new KiloGram();
-				mass.setUnitRepresentation(_obj);
+				mass.loadFromRepresentation(_obj);
 				if (mass.getAmount() == null)
 					mass = null;
-			} else if (Mole.class == _obj.get("class")) {
+			} else if (Mole.class == _obj.get(CLASS)) {
 				mole = new Mole();
-				mole.setUnitRepresentation(_obj);
+				mole.loadFromRepresentation(_obj);
 				if (mole.getAmount() == null)
 					mole = null;
 			}
 		}
 	}
 	@Override
-	public String calculationFormulae() {
+	public String toMathML() {
 		String molarMass, mass, mole;
 		molarMass = getValueWithUnit();
 		mass = "Mass";

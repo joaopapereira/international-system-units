@@ -1,17 +1,13 @@
 package uk.co.jpereira.isu;
 
-import static org.junit.Assert.*;
-
-import java.util.Set;
-
 import org.junit.AfterClass;
 import org.junit.Test;
-
 import uk.co.jpereira.isu.units.Ampere;
 import uk.co.jpereira.isu.units.Meter;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.derived.MolarMass;
-import uk.co.jpereira.utils.RuleOfThree;
+
+import static org.junit.Assert.assertEquals;
 
 public class ISUUnitsTest {
 

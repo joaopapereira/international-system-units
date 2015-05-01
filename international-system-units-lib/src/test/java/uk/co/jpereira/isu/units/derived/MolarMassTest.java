@@ -7,10 +7,10 @@ import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.co.jpereira.isu.exception.MissingParameters;
 import uk.co.jpereira.isu.units.KiloGram;
 import uk.co.jpereira.isu.units.Mole;
 import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isue.exception.MissingParameters;
 
 import static org.junit.Assert.*;
 
@@ -35,7 +35,7 @@ public class MolarMassTest {
 	public void testCalculateUnitExceptionNoUnits() {
 		MolarMass molarMass = new MolarMass();
 		try{
-			molarMass.calculateUnit();
+			molarMass.solve();
 		}catch(MissingParameters e){
 			return;
 		}
@@ -45,7 +45,7 @@ public class MolarMassTest {
 	public void testCalculateUnitExceptionOnlyMass() {
 		MolarMass molarMass = new MolarMass(new KiloGram());
 		try{
-			molarMass.calculateUnit();
+			molarMass.solve();
 		}catch(MissingParameters e){
 			return;
 		}
@@ -55,7 +55,7 @@ public class MolarMassTest {
 	public void testCalculateUnitExceptionOnlyMole() {
 		MolarMass molarMass = new MolarMass(new Mole());
 		try{
-			molarMass.calculateUnit();
+			molarMass.solve();
 		}catch(MissingParameters e){
 			return;
 		}
@@ -66,7 +66,7 @@ public class MolarMassTest {
 		MolarMass molarMass = new MolarMass();
 		molarMass.setAmount(10.);
 		try{
-			molarMass.calculateUnit();
+			molarMass.solve();
 		}catch(MissingParameters e){
 			return;
 		}
@@ -157,7 +157,7 @@ public class MolarMassTest {
 		((JSONObject) ((JSONArray) obj.get("subunits")).get(0)).put("unit_mod", UnitModifier.Unit);
 		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("class", Mole.class);
 		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("unit_mod", UnitModifier.YOTTA);
-		assertEquals("Compared representation", obj, molarMass.getUnitRepresentation());
+		assertEquals("Compared representation", obj, molarMass.getRepresentation());
 	}
 
 	@Test
@@ -172,7 +172,7 @@ public class MolarMassTest {
 		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("class", Mole.class);
 		((JSONObject) ((JSONArray) obj.get("subunits")).get(1)).put("unit_mod", UnitModifier.YOTTA);
 		MolarMass m1 = new MolarMass();
-		m1.setUnitRepresentation(obj);
+		m1.loadFromRepresentation(obj);
 		assertTrue("Compared representation", m1.equals(molarMass));
 	}
 }

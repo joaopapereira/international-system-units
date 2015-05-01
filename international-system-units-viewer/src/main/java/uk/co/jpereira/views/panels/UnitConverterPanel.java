@@ -1,10 +1,10 @@
 package uk.co.jpereira.views.panels;
 
 import uk.co.jpereira.isu.ISUUnits;
+import uk.co.jpereira.isu.exception.UnitNotConvertible;
 import uk.co.jpereira.isu.units.ISDimension;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isue.exception.UnitNotConvertible;
 import uk.co.jpereira.views.MainView;
 import uk.co.jpereira.views.utils.BasicUnitComboBox;
 import uk.co.jpereira.views.utils.ComboBoxItem;

@@ -3,12 +3,15 @@ package uk.co.jpereira.views.panels;
 import net.sourceforge.jeuclid.swing.JMathComponent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import uk.co.jpereira.isu.Formulae;
+import uk.co.jpereira.isu.ISURepresentable;
 import uk.co.jpereira.isu.ISUUnits;
+import uk.co.jpereira.isu.JSONRepresentation;
+import uk.co.jpereira.isu.exception.MissingParameters;
 import uk.co.jpereira.isu.units.BasicUnit;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.derived.DerivedUnit;
-import uk.co.jpereira.isue.exception.MissingParameters;
 import uk.co.jpereira.views.MainView;
 import uk.co.jpereira.views.utils.BasicUnitComboBox;
 
@@ -21,11 +24,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
 class ArgumentClass extends JPanel {
-	private BasicUnit unit;
+	private ISURepresentable unit;
 	BasicUnitComboBox unitModifierCombo;
 	JTextField amountField;
 
@@ -44,12 +48,12 @@ class ArgumentClass extends JPanel {
 		add(lblUnitName);
 
 		try {
-			this.unit = (BasicUnit) ((Class) unit.get("class")).newInstance();
-			this.unit.setUnitRepresentation(unit);
+			this.unit = (ISURepresentable) ((Class) unit.get(JSONRepresentation.CLASS)).newInstance();
+			this.unit.loadFromRepresentation(unit);
 			lblUnitName.setText(this.unit.toString());
 			if (this.unit instanceof DerivedUnit) {
 
-			} else {
+			} else if (this.unit instanceof ISUUnit) {
 				ISUUnit k = (ISUUnit) ((ISUUnit) this.unit).clone();
 				for (UnitModifier mod : UnitModifier.values()) {
 					k.setModifier(mod);
@@ -65,8 +69,8 @@ class ArgumentClass extends JPanel {
 		}
 	}
 
-	public BasicUnit getUnit() {
-		if (!(this.unit instanceof DerivedUnit)) {
+	public ISURepresentable getUnit() {
+		if ((this.unit instanceof ISUUnit)) {
 			((ISUUnit) unit).setModifier(unitModifierCombo.getSelectedModifier());
 		}
 		if (amountField.getText().length() > 0)
@@ -131,18 +135,20 @@ public class FormulaePanel extends JPanel {
 				int i = 0;
 				for (ArgumentClass c : arguments) {
 					if (obj == null) {
-						obj = c.getUnit().getUnitRepresentation();
-						((JSONArray) obj.get("subunits")).clear();
+						obj = c.getUnit().getRepresentation();
+						System.out.println("My representation: " + obj);
+						if (null != obj.get(JSONRepresentation.SUBUNITS))
+							((JSONArray) obj.get(JSONRepresentation.SUBUNITS)).clear();
 					} else {
-						((JSONArray) obj.get("subunits")).add(c.getUnit().getUnitRepresentation());
+						((JSONArray) obj.get(JSONRepresentation.SUBUNITS)).add(c.getUnit().getRepresentation());
 						i++;
 					}
 				}
-				arguments.get(0).getUnit().setUnitRepresentation(obj);
+				arguments.get(0).getUnit().loadFromRepresentation(obj);
 				try {
-					DerivedUnit currentUnit = (DerivedUnit) arguments.get(0).getUnit();
-					currentUnit.calculateUnit();
-					formulae.setContent("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">" + currentUnit.calculationFormulae() + "</math>");
+					ISURepresentable currentUnit = (ISURepresentable) arguments.get(0).getUnit();
+					currentUnit.solve();
+					formulae.setContent("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">" + currentUnit.toMathML() + "</math>");
 				} catch (MissingParameters e) {
 					JOptionPane.showMessageDialog(null, "Missing arguments, please add more arguments so that the application can calculate the values!", "Error", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
@@ -171,15 +177,25 @@ public class FormulaePanel extends JPanel {
 		
 			    Object nodeInfo = node.getUserObject();
 			    if (node.isLeaf()) {
-			    	DerivedUnit unit = (DerivedUnit)nodeInfo;
-			    	formulae.setContent("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">" + unit.calculationFormulae() + "</math>");
-					JSONObject repr = unit.getUnitRepresentation();
+					formulaeAttributes.setVisible(false);
+					ISURepresentable unit = (ISURepresentable) nodeInfo;
+					formulae.setContent("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">" + unit.toMathML() + "</math>");
+					JSONObject repr = unit.getRepresentation();
+					for (ArgumentClass arg : arguments) {
+						formulaeAttributes.remove(arg);
+						arg.setVisible(false);
+					}
 					arguments.clear();
-					ArgumentClass arg = new ArgumentClass(formulaeAttributes, 27, repr);
-					arg.setBounds(0, 40, formulaeAttributes.getWidth(), 50);
-					formulaeAttributes.add(arg);
+					int i = 0;
+					ArgumentClass arg;
+					arg = new ArgumentClass(formulaeAttributes, 27, repr);
+					if (unit.isReversible()) {
+						arg.setBounds(0, 40, formulaeAttributes.getWidth(), 50);
+						formulaeAttributes.add(arg);
+						i++;
+					}
 					arguments.add(arg);
-					int i = 1;
+
 					for (Object _obj : (JSONArray) repr.get("subunits")) {
 						arg = new ArgumentClass(formulaeAttributes, 27, (JSONObject) _obj);
 						arg.setBounds(0, 40 + 50 * i, formulaeAttributes.getWidth(), 50);
@@ -187,6 +203,7 @@ public class FormulaePanel extends JPanel {
 						i++;
 					}
 
+					formulaeAttributes.setVisible(true);
 				}
 			}
 		});
@@ -201,6 +218,16 @@ public class FormulaePanel extends JPanel {
 		for(BasicUnit unit: ISUUnits.retrieveDerived()){
 			units.add(new DefaultMutableTreeNode(unit));
 		}
+		DefaultMutableTreeNode formulae;
+		HashMap<String, List<Formulae>> allFormulae = ISUUnits.getFormulae();
+		for (String nodeName : allFormulae.keySet()) {
+			formulae = new DefaultMutableTreeNode(nodeName);
+			top.add(formulae);
+			for (Formulae form : allFormulae.get(nodeName)) {
+				formulae.add(new DefaultMutableTreeNode(form));
+			}
+		}
+
 		tree.setModel(new DefaultTreeModel(top));
 	}
 }

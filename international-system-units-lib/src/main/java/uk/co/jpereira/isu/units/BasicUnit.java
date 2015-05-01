@@ -1,12 +1,13 @@
 package uk.co.jpereira.isu.units;
 
 import org.json.simple.JSONObject;
-import uk.co.jpereira.isue.exception.MissingParameters;
+import uk.co.jpereira.isu.ISURepresentable;
+import uk.co.jpereira.isu.exception.MissingParameters;
 
 import java.rmi.server.UID;
 import java.util.logging.Logger;
 
-public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Precision>>{
+public abstract class BasicUnit<Precision> implements ISURepresentable<Precision>, Comparable<BasicUnit<Precision>> {
 	protected final static UID classId = new UID();
 	protected final Logger logger; 
 	private Precision amountInUnits;
@@ -93,7 +94,7 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 	 * @return JSON Representation
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONObject getUnitRepresentation() {
+	public JSONObject getRepresentation() {
 		JSONObject obj = new JSONObject();
 		obj.put("class", getClass());
 		try {
@@ -109,7 +110,7 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 	 *
 	 * @return JSON Representation
 	 */
-	public void setUnitRepresentation(JSONObject object) {
+	public void loadFromRepresentation(JSONObject object) {
 		setAmount((Precision) object.get("amount"));
 	}
 
@@ -133,13 +134,11 @@ public abstract class BasicUnit<Precision>  implements Comparable<BasicUnit<Prec
 	/**
 	 * Retrieve the value and the
 	 */
-	public String getValueWithUnitMathML() {
+	public String toMathML() {
 
 		try {
-			//return new String(getAmount() + "(" + smallName() + ")");
 			return new String("<mtext>" + getAmount() + " " + getSmallNameMathML() + "</mtext>");
 		} catch (MissingParameters e) {
-			//return new String("(" + smallName() + ")");
 			return new String("<mtext>" + getSmallNameMathML() + "</mtext>");
 		}
 	}
