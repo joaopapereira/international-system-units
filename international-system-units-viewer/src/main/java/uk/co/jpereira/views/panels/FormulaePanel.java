@@ -11,7 +11,6 @@ import uk.co.jpereira.isu.exception.MissingParameters;
 import uk.co.jpereira.isu.units.BasicUnit;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.UnitModifier;
-import uk.co.jpereira.isu.units.derived.DerivedUnit;
 import uk.co.jpereira.views.MainView;
 import uk.co.jpereira.views.utils.BasicUnitComboBox;
 
@@ -51,13 +50,16 @@ class ArgumentClass extends JPanel {
 			this.unit = (ISURepresentable) ((Class) unit.get(JSONRepresentation.CLASS)).newInstance();
 			this.unit.loadFromRepresentation(unit);
 			lblUnitName.setText(this.unit.toString());
-			if (this.unit instanceof DerivedUnit) {
-
-			} else if (this.unit instanceof ISUUnit) {
+			if (this.unit instanceof ISUUnit) {
 				ISUUnit k = (ISUUnit) ((ISUUnit) this.unit).clone();
+				int i = 0;
 				for (UnitModifier mod : UnitModifier.values()) {
 					k.setModifier(mod);
 					unitModifierCombo.addItem(k);
+					if (((ISUUnit) this.unit).getModifier() == k.getModifier()) {
+						unitModifierCombo.setSelectedIndex(i);
+					}
+					i++;
 				}
 				add(unitModifierCombo);
 			}
