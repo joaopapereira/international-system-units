@@ -172,6 +172,46 @@ public class MolarConcentration extends Formulae<Double> {
      */
     @Override
     public Double getAmount() throws MissingParameters {
+        solve();
         return amount;
+    }
+
+    /**
+     * Set mol
+     *
+     * @param mol
+     */
+    public void setMole(Mole mol) {
+        this.mole = mol;
+    }
+
+    /**
+     * Set Liter
+     *
+     * @param liter
+     */
+    public void setLiter(Liter liter) {
+        this.liter = liter;
+    }
+
+    /**
+     * Compare to units using the names
+     *
+     * @param otherUnit Other unit to compare to
+     * @throws MissingParameters
+     */
+    public int compareTo(MolarConcentration otherUnit) throws MissingParameters {
+        int res1 = toString().compareTo(otherUnit.toString());
+        System.out.println("Name compare: " + toString() + " == " + otherUnit.toString() + ":" + res1);
+        if (res1 == 0) {
+            System.out.println("value compare: " + getAmount() + " == " + otherUnit.getAmount() + ": " + Double.compare(getAmount(), otherUnit.getAmount()));
+            return Double.compare(getAmount(), otherUnit.getAmount());
+        }
+        return res1;
+    }
+
+    public boolean equals(MolarConcentration otherUnit) throws MissingParameters {
+        System.out.println("Equals call");
+        return 0 == compareTo(otherUnit);
     }
 }

@@ -175,4 +175,5 @@ public class MolarMassTest {
 		m1.loadFromRepresentation(obj);
 		assertTrue("Compared representation", m1.equals(molarMass));
 	}
+
 }

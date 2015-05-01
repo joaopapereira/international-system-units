@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import uk.co.jpereira.isu.Formulae;
 import uk.co.jpereira.isu.exception.MissingParameters;
 import uk.co.jpereira.isu.units.KiloGram;
-import uk.co.jpereira.isu.units.Mole;
 import uk.co.jpereira.isu.units_accepted.Liter;
 
 /**
@@ -105,7 +104,7 @@ public class MassConcentration extends Formulae<Double> {
         }
         for (Object subobject : subunits) {
             JSONObject subunit = (JSONObject) subobject;
-            if (Mole.class == subunit.get(CLASS)) {
+            if (KiloGram.class == subunit.get(CLASS)) {
                 kiloGram = new KiloGram();
                 kiloGram.loadFromRepresentation(subunit);
                 if (kiloGram.getAmount() == null)
@@ -173,6 +172,45 @@ public class MassConcentration extends Formulae<Double> {
      */
     @Override
     public Double getAmount() throws MissingParameters {
+        solve();
         return amount;
+    }
+
+    /**
+     * Set kilo grams
+     *
+     * @param kg
+     */
+    public void setKiloGram(KiloGram kg) {
+        kiloGram = kg;
+    }
+
+    /**
+     * Set Liter
+     *
+     * @param liter
+     */
+    public void setLiter(Liter liter) {
+        this.liter = liter;
+    }
+
+    /**
+     * Compare to units using the names
+     *
+     * @param otherUnit Other unit to compare to
+     * @throws MissingParameters
+     */
+    public int compareTo(MassConcentration otherUnit) throws MissingParameters {
+        int res1 = toString().compareTo(otherUnit.toString());
+        System.out.println("Name compare: " + toString() + " == " + otherUnit.toString() + ":" + res1);
+        if (res1 == 0) {
+            System.out.println("value compare: " + getAmount() + " == " + otherUnit.getAmount() + ": " + Double.compare(getAmount(), otherUnit.getAmount()));
+            return Double.compare(getAmount(), otherUnit.getAmount());
+        }
+        return res1;
+    }
+
+    public boolean equals(MassConcentration otherUnit) throws MissingParameters {
+        return 0 == compareTo(otherUnit);
     }
 }
