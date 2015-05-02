@@ -9,7 +9,11 @@ import org.junit.Test;
 import uk.co.jpereira.isu.exception.MissingParameters;
 import uk.co.jpereira.isu.units.Mole;
 import uk.co.jpereira.isu.units.UnitModifier;
+import uk.co.jpereira.isu.units.derived.MolarConcentration;
 import uk.co.jpereira.isu.units_accepted.Liter;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
@@ -46,10 +50,12 @@ public class MolarConcentrationTest {
 
     @Test
     public void testSolve() throws MissingParameters {
+        Logger.getLogger(MolarConcentration.class.getName()).setUseParentHandlers(false);
+        Logger.getLogger(MolarConcentration.class.getName()).setLevel(Level.FINEST);
         MolarConcentration molarConcentration = new MolarConcentration();
-        Mole kg = new Mole();
-        kg.setAmount(10.0);
-        molarConcentration.setMole(kg);
+        Mole mole = new Mole();
+        mole.setAmount(10.0);
+        molarConcentration.setMole(mole);
         Liter liter = new Liter();
         liter.setAmount(2.0);
         molarConcentration.setLiter(liter);
@@ -60,10 +66,10 @@ public class MolarConcentrationTest {
     @Test
     public void testGetRepresentation() throws ParseException, MissingParameters {
         MolarConcentration molarConcentration = new MolarConcentration();
-        Mole kg = new Mole(20.5, UnitModifier.Unit);
+        Mole mole = new Mole(20.5, UnitModifier.Unit);
         Liter l = new Liter(5.1, UnitModifier.YOTTA);
         molarConcentration.setLiter(l);
-        molarConcentration.setMole(kg);
+        molarConcentration.setMole(mole);
         molarConcentration.solve();
         String repr = "{\"amount\": 4.019607843137255E-24, \"subunits\": [{\"amount\": 20.5, \"unit_mod\": \"g\"}, {\"amount\": 5.1, \"unit_mod\": \"Ymol\"}]}";
         JSONParser parser = new JSONParser();

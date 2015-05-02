@@ -1,22 +1,24 @@
-package uk.co.jpereira.isu.chemistry;
+package uk.co.jpereira.isu.units.derived;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import uk.co.jpereira.isu.Formulae;
 import uk.co.jpereira.isu.exception.MissingParameters;
+import uk.co.jpereira.isu.units.ISDimension;
 import uk.co.jpereira.isu.units.Mole;
+import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units_accepted.Liter;
 
 /**
  * Created by blue on 01/05/2015.
  */
-public class MolarConcentration extends Formulae<Double> {
-    static final String packageName = "Chemistry";
+@Unit(dimension = ISDimension.COMPOSED)
+public class MolarConcentration extends DerivedUnit {
     double amount;
     Mole mole;
     Liter liter;
 
     public MolarConcentration() {
+        super(Double.NaN);
         mole = null;
         liter = null;
     }
@@ -27,42 +29,53 @@ public class MolarConcentration extends Formulae<Double> {
     @Override
     public String toString() {
         if (liter == null || mole == null)
-            return new String("MolarMass");
+            return new String("MolarConcentration");
         return mole.name() + "/" + liter.name();
     }
 
+    /**
+     * Retrieve the name of the the Unit
+     *
+     * @return Name
+     */
     @Override
-    public String getPackageName() {
-        return packageName;
+    public String name() {
+        if (liter == null || mole == null)
+            return new String("MolarConcentration");
+        return liter.name() + "/" + mole.name();
     }
 
     @Override
     public double solve() throws MissingParameters {
-        if (mole == null)
-            throw new MissingParameters("Mole");
-        if (liter == null)
-            throw new MissingParameters("Liter");
-        amount = mole.getAmountToUnit() / liter.getAmountToUnit();
-        return amount;
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public String resultUnit() {
-        String result = new String();
-        if (mole == null)
-            result += "Mole";
-        else
-            result += mole.getSmallName();
-        result += "/";
-        if (liter == null)
-            result += "Liter";
-        else
-            result += liter.getSmallName();
+        double result = Double.NaN;
+        Double currentAmount = getAmountToUnit();
+        if (currentAmount != null && !currentAmount.isNaN() && liter != null && mole != null) {
+            logger.finest("No need to calculate, values present!");
+            return getAmountToUnit();
+        } else if ((currentAmount == null || currentAmount.isNaN()) && liter != null && mole != null) {
+            logger.finest("Amount was missing!");
+            setAmount(mole.getAmount() / liter.getAmountToUnit());
+            result = getAmountToUnit();
+        } else if (currentAmount != null && !getAmountToUnit().isNaN()) {
+            if (liter != null) {
+                logger.finest("Mole was missing!");
+                mole = new Mole(getAmountToUnit() * liter.getAmountToUnit());
+                result = mole.getAmount();
+            } else if (mole != null) {
+                logger.finest("Liter was missing!");
+                liter = new Liter(mole.getAmount() / getAmountToUnit());
+                result = liter.getAmount();
+            }
+        }
+        logger.finest("Current result is: " + result);
+        if (new Double(result).isNaN()) {
+            logger.finest("No calcules made...");
+            if (liter == null)
+                throw new MissingParameters("Liter");
+            else if (mole == null)
+                throw new MissingParameters("Mole");
+        }
         return result;
-
     }
 
     /**
@@ -73,8 +86,7 @@ public class MolarConcentration extends Formulae<Double> {
      */
     @Override
     public JSONObject getRepresentation() {
-        JSONObject obj = this.generateBaseObject();
-        obj.put(AMOUNT, amount);
+        JSONObject obj = super.getRepresentation();
         Liter l = liter;
         Mole mo = mole;
         if (l == null)
@@ -94,9 +106,7 @@ public class MolarConcentration extends Formulae<Double> {
      */
     @Override
     public void loadFromRepresentation(JSONObject object) {
-        if (object.containsKey(AMOUNT)) {
-            amount = (Double) object.get(AMOUNT);
-        }
+        super.loadFromRepresentation(object);
         JSONArray subunits = getSubUnits(object);
         if (subunits == null) {
             mole = null;
@@ -112,11 +122,22 @@ public class MolarConcentration extends Formulae<Double> {
             } else if (Liter.class == subunit.get(CLASS)) {
                 liter = new Liter();
                 liter.loadFromRepresentation(subunit);
-                ;
                 if (liter.getAmount() == null)
                     liter = null;
             }
         }
+    }
+
+    /**
+     * Retrieve the abbreviated name of the unit
+     *
+     * @return
+     */
+    @Override
+    public String smallName() {
+        if (liter == null || mole == null)
+            return new String("MolarMass");
+        return mole.smallName() + "/" + liter.getSmallName(false);
     }
 
     /**
@@ -138,7 +159,7 @@ public class MolarConcentration extends Formulae<Double> {
         if (liter != null)
             literName = liter.toMathML();
         result = "<mrow>" +
-                " <mn>" + amount + " (" + resultUnit() + ")</mn>" +
+                " <mn>" + getValueWithUnit() + "</mn>" +
                 " <mo>=</mo>" +
                 " <mfrac>" +
                 "  <mrow>" +
@@ -153,19 +174,6 @@ public class MolarConcentration extends Formulae<Double> {
     }
 
     /**
-     * Set the amount of units in this object unit
-     *
-     * @param amount
-     * @return amount of units
-     */
-    @Override
-    public void setAmount(Double amount) {
-        if (amount == null)
-            return;
-        this.amount = amount;
-    }
-
-    /**
      * Retrieve the amount of units in the ISU Unit
      *
      * @return amount of units
@@ -173,16 +181,29 @@ public class MolarConcentration extends Formulae<Double> {
     @Override
     public Double getAmount() throws MissingParameters {
         solve();
-        return amount;
+        return getAmountToUnit();
     }
 
-    /**
-     * Set mol
-     *
-     * @param mol
-     */
-    public void setMole(Mole mol) {
-        this.mole = mol;
+    public Liter getVolume() throws MissingParameters {
+        if (liter == null) {
+            solve();
+        }
+        return liter;
+    }
+
+    public void setVolume(Liter liter) {
+        this.liter = liter;
+    }
+
+    public Mole getMole() throws MissingParameters {
+        if (mole == null) {
+            solve();
+        }
+        return mole;
+    }
+
+    public void setMole(Mole mole) {
+        this.mole = mole;
     }
 
     /**

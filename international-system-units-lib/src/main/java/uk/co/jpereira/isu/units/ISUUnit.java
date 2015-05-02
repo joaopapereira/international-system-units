@@ -90,7 +90,13 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	}
 
 	public String getSmallName(){
-		return new String(modififerFromUnit.getSmallRepr()+smallName());
+		return getSmallName(true);
+	}
+
+	public String getSmallName(boolean addModifier) {
+		if (addModifier)
+			return new String(modififerFromUnit.getSmallRepr() + smallName());
+		return new String(smallName());
 	}
 
 	/**

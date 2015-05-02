@@ -1,10 +1,20 @@
 package uk.co.jpereira.isu;
 
+import java.util.logging.Logger;
+
 /**
  * Created by blue on 01/05/2015.
  */
 public abstract class Formulae<Precision> implements ISURepresentable<Precision>, Comparable<Formulae> {
 
+    protected final Logger logger;
+
+    /**
+     * Formulae constructor
+     */
+    public Formulae() {
+        logger = Logger.getLogger(this.getClass().getPackage().getName());
+    }
     public abstract String getPackageName();
 
     /**

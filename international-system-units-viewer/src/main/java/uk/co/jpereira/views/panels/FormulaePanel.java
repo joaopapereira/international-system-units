@@ -99,11 +99,12 @@ public class FormulaePanel extends JPanel {
 		tree = new JTree();
 		tree.setBounds(0, 0, 150, (int) MainView.contentSize.getHeight());
 
-		tree.setPreferredSize(new Dimension(150, (int) MainView.contentSize.getHeight() - 50));
-		JScrollPane allFormulae = new JScrollPane(tree, 
-												JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+		loadTree();
+		//tree.setPreferredSize(new Dimension(150, (int) MainView.contentSize.getHeight() - 50));
+		JScrollPane allFormulae = new JScrollPane(tree,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 												JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		allFormulae.setBounds(0, 0, 150, (int) MainView.contentSize.getHeight());
+		allFormulae.setBounds(0, 0, 150, (int) MainView.contentSize.getHeight() - 30);
 		allFormulae.setPreferredSize(new Dimension(150, (int) MainView.contentSize.getHeight() - 50));
 		JPanel formulaeShowPanel = new JPanel();
 		formulaeShowPanel.setBounds(tree.getWidth(), 0, (int) MainView.contentSize.getWidth() - tree.getWidth(), (int) MainView.contentSize.getHeight() / 4);
@@ -114,7 +115,6 @@ public class FormulaePanel extends JPanel {
 		formulae.setVisible(true);
 		formulaeShowPanel.setLayout(null);
 		formulaeShowPanel.add(formulae);
-		loadTree();
 		add(allFormulae);
 
 		formulaeAttributes = new JPanel();
@@ -222,6 +222,7 @@ public class FormulaePanel extends JPanel {
 		}
 		DefaultMutableTreeNode formulae;
 		HashMap<String, List<Formulae>> allFormulae = ISUUnits.getFormulae();
+
 		for (String nodeName : allFormulae.keySet()) {
 			formulae = new DefaultMutableTreeNode(nodeName);
 			top.add(formulae);

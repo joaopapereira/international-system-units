@@ -141,17 +141,12 @@ public class ISUUnits {
 		HashMap<String, List<Formulae>> result = new HashMap<String, List<Formulae>>();
 
 		for (Class<?> formulae : reflections.getSubTypesOf(Formulae.class)) {
-			LOGGER.severe("Formulae :" + formulae);
 			try {
-				LOGGER.severe("t0");
 				Formulae form = (Formulae) formulae.newInstance();
-				LOGGER.severe("t1");
 				String pckName = form.getPackageName();
-				LOGGER.severe("t2");
 				if (!result.containsKey(pckName)) {
 					result.put(pckName, new ArrayList<Formulae>());
 				}
-				LOGGER.severe("t3");
 				result.get(pckName).add(form);
 			} catch (InstantiationException | IllegalAccessException e) {
 				LOGGER.severe(e.getMessage());
