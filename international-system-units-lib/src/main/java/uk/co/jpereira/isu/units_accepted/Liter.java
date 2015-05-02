@@ -1,10 +1,11 @@
 package uk.co.jpereira.isu.units_accepted;
 
+import uk.co.jpereira.isu.units.ISDimension;
 import uk.co.jpereira.isu.units.ISUUnit;
 import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units.UnitModifier;
 
-@Unit
+@Unit(dimension = ISDimension.VOLUME)
 public class Liter extends ISUUnit<Double> {
 	/**
 	 * ISUUnit constructor

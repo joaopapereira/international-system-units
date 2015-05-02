@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Created by blue on 01/05/2015.
+ * Created by Joao Pereira on 01/05/2015.
  */
 public class BasicUnitComboBox extends JComboBox<BasicUnit> {
     private ArrayList<BasicUnit> units;
@@ -19,7 +19,7 @@ public class BasicUnitComboBox extends JComboBox<BasicUnit> {
         super();
         renderer = new BasicUnitRenderer();
         renderer.setPreferredSize(new Dimension(50, 50));
-        units = new ArrayList<BasicUnit>();
+        units = new ArrayList<>();
         setRenderer(renderer);
     }
 
@@ -84,8 +84,15 @@ public class BasicUnitComboBox extends JComboBox<BasicUnit> {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
-
-            setIcon(new ImageIcon(MathML2Image.convert(unit.getSmallNameMathML())));
+            if (unit == null) {
+                setUhOhText("No unit",
+                        list.getFont());
+                setIcon(null);
+            } else {
+                setIcon(new ImageIcon(MathML2Image.convert(unit.getSmallNameMathML())));
+                setUhOhText("",
+                        list.getFont());
+            }
             return this;
         }
 
