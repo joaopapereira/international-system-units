@@ -13,7 +13,6 @@ import uk.co.jpereira.isu.units_accepted.Liter;
  */
 @Unit(dimension = ISDimension.COMPOSED)
 public class MolarConcentration extends DerivedUnit {
-    double amount;
     Mole mole;
     Liter liter;
 
@@ -223,16 +222,13 @@ public class MolarConcentration extends DerivedUnit {
      */
     public int compareTo(MolarConcentration otherUnit) throws MissingParameters {
         int res1 = toString().compareTo(otherUnit.toString());
-        System.out.println("Name compare: " + toString() + " == " + otherUnit.toString() + ":" + res1);
         if (res1 == 0) {
-            System.out.println("value compare: " + getAmount() + " == " + otherUnit.getAmount() + ": " + Double.compare(getAmount(), otherUnit.getAmount()));
             return Double.compare(getAmount(), otherUnit.getAmount());
         }
         return res1;
     }
 
     public boolean equals(MolarConcentration otherUnit) throws MissingParameters {
-        System.out.println("Equals call");
         return 0 == compareTo(otherUnit);
     }
 }

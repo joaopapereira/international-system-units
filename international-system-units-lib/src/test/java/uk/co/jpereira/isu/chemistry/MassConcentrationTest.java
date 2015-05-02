@@ -9,6 +9,7 @@ import org.junit.Test;
 import uk.co.jpereira.isu.exception.MissingParameters;
 import uk.co.jpereira.isu.units.KiloGram;
 import uk.co.jpereira.isu.units.UnitModifier;
+import uk.co.jpereira.isu.units.derived.MassConcentration;
 import uk.co.jpereira.isu.units_accepted.Liter;
 
 import static org.junit.Assert.*;
@@ -45,16 +46,37 @@ public class MassConcentrationTest {
     }
 
     @Test
+    public void testNoLiterSolve() throws MissingParameters {
+        MassConcentration massConcentration = new MassConcentration();
+        KiloGram kg = new KiloGram();
+        kg.setAmount(10.0);
+        massConcentration.setKiloGram(kg);
+        massConcentration.setAmount(5.);
+        massConcentration.solve();
+        assertEquals(2., massConcentration.getLiter().getAmount(), 0.1);
+    }
+
+    @Test
+    public void testNoKilogramSolve() throws MissingParameters {
+        MassConcentration massConcentration = new MassConcentration();
+        Liter liter = new Liter(UnitModifier.DECI);
+        liter.setAmount(2.0);
+        massConcentration.setLiter(liter);
+        massConcentration.setAmount(10.);
+        massConcentration.solve();
+        assertEquals(2., massConcentration.getKiloGram().getAmount(), 0.1);
+    }
+    @Test
     public void testSolve() throws MissingParameters {
         MassConcentration massConcentration = new MassConcentration();
         KiloGram kg = new KiloGram();
         kg.setAmount(10.0);
         massConcentration.setKiloGram(kg);
-        Liter liter = new Liter();
+        Liter liter = new Liter(UnitModifier.DECI);
         liter.setAmount(2.0);
         massConcentration.setLiter(liter);
         massConcentration.solve();
-        assertEquals(5000., massConcentration.getAmount(), 0.1);
+        assertEquals(50., massConcentration.getAmount(), 0.1);
     }
 
     @Test

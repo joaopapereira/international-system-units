@@ -12,9 +12,6 @@ import uk.co.jpereira.isu.units.UnitModifier;
 import uk.co.jpereira.isu.units.derived.MolarConcentration;
 import uk.co.jpereira.isu.units_accepted.Liter;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import static org.junit.Assert.*;
 
 public class MolarConcentrationTest {
@@ -49,9 +46,29 @@ public class MolarConcentrationTest {
     }
 
     @Test
+    public void testNoLiterSolve() throws MissingParameters {
+        MolarConcentration massConcentration = new MolarConcentration();
+        Mole mole = new Mole();
+        mole.setAmount(10.0);
+        massConcentration.setMole(mole);
+        massConcentration.setAmount(5.);
+        massConcentration.solve();
+        assertEquals(2., massConcentration.getVolume().getAmount(), 0.1);
+    }
+
+    @Test
+    public void testNoMoleSolve() throws MissingParameters {
+        MolarConcentration massConcentration = new MolarConcentration();
+        Liter liter = new Liter(UnitModifier.DECI);
+        liter.setAmount(2.0);
+        massConcentration.setLiter(liter);
+        massConcentration.setAmount(10.);
+        massConcentration.solve();
+        assertEquals(2., massConcentration.getMole().getAmount(), 0.1);
+    }
+
+    @Test
     public void testSolve() throws MissingParameters {
-        Logger.getLogger(MolarConcentration.class.getName()).setUseParentHandlers(false);
-        Logger.getLogger(MolarConcentration.class.getName()).setLevel(Level.FINEST);
         MolarConcentration molarConcentration = new MolarConcentration();
         Mole mole = new Mole();
         mole.setAmount(10.0);
