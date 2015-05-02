@@ -70,9 +70,8 @@ public class UnitConverterPanel extends Panel {
 			public void itemStateChanged(ItemEvent event) {
 				if (event.getStateChange() == ItemEvent.SELECTED) {
 					ISUUnit item = ((ComboBoxItem<ISUUnit>)event.getItem()).getValue();
-					//ISUUnit item = (ISUUnit)event.getItem();
-					loadModifiersComboBox(item);
-		        }
+					loadModifirstComboBox(item);
+				}
 			}
 		});
 		if(unitBox.getItemCount() == 0){
@@ -130,7 +129,8 @@ public class UnitConverterPanel extends Panel {
 		lblType.setBounds(79, 44, 46, 14);
 		add(lblType);
 	}
-	private void loadModifiersComboBox(ISUUnit<?> unit){
+
+	private void loadModifirstComboBox(ISUUnit<?> unit) {
 		fromBox.removeAllItems();
 		toBox.removeAllItems();
 		if(unit == null){
@@ -155,10 +155,10 @@ public class UnitConverterPanel extends Panel {
 		}
 		if(unitBox.getItemCount() == 0){
 			unitBox.setEnabled(false);
-			loadModifiersComboBox(null);
+			loadModifirstComboBox(null);
 		}else{
 			unitBox.setEnabled(true);
-			loadModifiersComboBox((ISUUnit) ((ComboBoxItem) unitBox.getSelectedItem()).getValue());
+			loadModifirstComboBox((ISUUnit) ((ComboBoxItem) unitBox.getSelectedItem()).getValue());
 		}
 	}
 }
