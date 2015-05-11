@@ -4,7 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- * Created by blue on 01/05/2015.
+ * Created by Joao Pereira on 01/05/2015.
  */
 public interface JSONRepresentation {
     String SUBUNITS = "subunits";
@@ -16,7 +16,7 @@ public interface JSONRepresentation {
      * Function will generate the JSON representation
      * of the object
      *
-     * @return
+     * @return Return the JSON Representation of the object
      */
     JSONObject getRepresentation();
 

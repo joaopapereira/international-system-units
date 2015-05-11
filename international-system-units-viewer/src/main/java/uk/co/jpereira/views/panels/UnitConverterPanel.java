@@ -42,7 +42,7 @@ public class UnitConverterPanel extends Panel {
 		typeBox = new JComboBox<ISDimension>();
 		typeBox.setBounds(135, 41, 176, 20);
 		for(ISDimension ut: ISDimension.values()){
-			if(ut.simpleConvertion())
+			if(ut.simpleConversion())
 				typeBox.addItem(ut);
 		}
 		typeBox.addItemListener(new ItemListener() {

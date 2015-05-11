@@ -163,7 +163,7 @@ public class MolarMass extends DerivedUnit{
 
 	/**
 	 * Retrieve JSON representation of the Unit
-	 * @return JSON Representation
+	 * @param object JSON Object that represents this unit
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -218,7 +218,10 @@ public class MolarMass extends DerivedUnit{
 	 * Compare to units using the names
 	 *
 	 * @param otherUnit Other unit to compare to
-	 * @throws MissingParameters
+	 * @return 0 If objects are equal
+	 *         Bigger 0 If otherUnit is bigger then current object
+	 *         Smaller 0 If current object is bigger then otherUnit
+	 * @throws MissingParameters If not enough parameters are present
 	 */
 	public int compareTo(MolarMass otherUnit) throws MissingParameters {
 		int res1 = name().compareTo(otherUnit.name());

@@ -29,7 +29,7 @@ public abstract class BasicUnit<Precision> implements ISURepresentable<Precision
 
 	/**
 	 * Set the amount of units in this object unit
-	 * @return amount of units
+	 * @param amount Amount to be set
 	 */
 	@SuppressWarnings("unchecked")
 	public void setAmount(Precision amount){
@@ -107,8 +107,7 @@ public abstract class BasicUnit<Precision> implements ISURepresentable<Precision
 
 	/**
 	 * Retrieve JSON representation of the Unit
-	 *
-	 * @return JSON Representation
+	 * @param object JSON Object that represents this unit
 	 */
 	public void loadFromRepresentation(JSONObject object) {
 		setAmount((Precision) object.get("amount"));
@@ -116,12 +115,13 @@ public abstract class BasicUnit<Precision> implements ISURepresentable<Precision
 
 	/**
 	 * Retrieve the abbreviated name of the unit
-	 * @return
+	 * @return Abbreviation of the name
 	 */
 	public abstract String smallName();
 
 	/**
 	 * Retrieve the value and the
+	 * @return Value and the Abbreviation of the unit
 	 */
 	public String getValueWithUnit() {
 		try {
@@ -133,6 +133,7 @@ public abstract class BasicUnit<Precision> implements ISURepresentable<Precision
 
 	/**
 	 * Retrieve the value and the
+	 * @return The MathML representation of the Unit
 	 */
 	public String toMathML() {
 
@@ -146,10 +147,18 @@ public abstract class BasicUnit<Precision> implements ISURepresentable<Precision
 	/**
 	 * Compare to units using the names
 	 * @param otherUnit Other unit to compare to
+	 * @return 0 If objects are equal
+	 *         Bigger 0 If otherUnit is bigger then current object
+	 *         Lesser 0 If current object is bigger then otherUnit
 	 */
 	public int compareTo(BasicUnit otherUnit){
 		return name().compareTo(otherUnit.name());
 	}
+
+	/**
+	 * Clone the Unit
+	 * @return New Unit object cloned
+	 */
 	public Object clone(){
 		try {
 			BasicUnit unit = (BasicUnit)this.getClass().newInstance();

@@ -61,9 +61,10 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 		return (Precision)modififerFromUnit.convert((Double)super.getAmountToUnit());
 	}
 
+
 	/**
 	 * Set the amount of units in this object unit
-	 * @return amount of units
+	 * @param amount Amount to be set
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -107,7 +108,12 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	public String getSmallNameMathML() {
 		return new String("<mtext>" + getSmallName() + "</mtext>");
 	}
-	
+
+	/**
+	 * Function will convert the current unit using the modifier
+	 * @param modifier Modifier that will be used to convert the current unit
+	 * @return The amount already converted to the modifier
+	 */
 	@SuppressWarnings("unchecked")
 	public Precision convertTo(UnitModifier modifier){
 		if(modififerFromUnit == UnitModifier.Unit){
@@ -121,6 +127,9 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 	/**
 	 * Compare to units using the names
 	 * @param otherUnit Other unit to compare to
+	 * @return 0 If objects are equal
+	 *         Bigger 0 If otherUnit is bigger then current object
+	 *         Smaller 0 If current object is bigger then otherUnit
 	 */
 	public int compareTo(ISUUnit otherUnit){
 		return name().compareTo(otherUnit.name());
@@ -147,8 +156,7 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 
 	/**
 	 * Retrieve JSON representation of the Unit
-	 *
-	 * @return JSON Representation
+	 * @param object JSON Object that represents this unit
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -157,6 +165,11 @@ public abstract class ISUUnit<Precision> extends BasicUnit<Precision>{
 		super.loadFromRepresentation(object);
 	}
 
+	/**
+	 * Function that will solve the formulae
+	 * @return The result
+	 * @throws MissingParameters If not enough parameters are present
+	 */
 	@Override
 	public double solve() throws MissingParameters {
 		return 0;

@@ -9,13 +9,23 @@ import uk.co.jpereira.isu.units.Unit;
 import uk.co.jpereira.isu.units_accepted.Liter;
 
 /**
- * Created by blue on 01/05/2015.
+ * @author Joao Pereira
+ * This enum will represent all the Dimension available in the ISU
  */
 @Unit(dimension = ISDimension.COMPOSED)
 public class MassConcentration extends DerivedUnit {
+    /**
+     * KiloGram amount of Mass
+     */
     KiloGram kiloGram;
+    /**
+     * Amount of liters
+     */
     Liter liter;
 
+    /**
+     * Class constructor
+     */
     public MassConcentration() {
         super(Double.NaN);
         kiloGram = null;
@@ -28,7 +38,7 @@ public class MassConcentration extends DerivedUnit {
     @Override
     public String toString() {
         if (liter == null || kiloGram == null)
-            return new String("MassConcentration");
+            return "MassConcentration";
         return kiloGram.name() + "/" + liter.name();
     }
 
@@ -41,10 +51,15 @@ public class MassConcentration extends DerivedUnit {
     @Override
     public String name() {
         if (liter == null || kiloGram == null)
-            return new String("MassConcentration");
+            return "MassConcentration";
         return liter.name() + "/" + kiloGram.name();
     }
 
+    /**
+     * Function that will solve the formulae
+     * @return The result
+     * @throws MissingParameters If not enough parameters are present
+     */
     @Override
     public double solve() throws MissingParameters {
         double result = Double.NaN;
@@ -77,12 +92,10 @@ public class MassConcentration extends DerivedUnit {
         }
         return result;
     }
-
     /**
-     * Function will generate the JSON representation
-     * of the object
+     * Retrieve JSON representation of the Unit
      *
-     * @return
+     * @return JSON Representation
      */
     @Override
     public JSONObject getRepresentation() {
@@ -129,10 +142,10 @@ public class MassConcentration extends DerivedUnit {
         }
     }
 
+
     /**
      * Retrieve the abbreviated name of the unit
-     *
-     * @return
+     * @return Abbreviation of the name
      */
     @Override
     public String smallName() {
@@ -188,14 +201,14 @@ public class MassConcentration extends DerivedUnit {
     /**
      * Set kilo grams
      *
-     * @param kg
+     * @param kg KilogGrams to use in the concentration calc
      */
     public void setKiloGram(KiloGram kg) {
         kiloGram = kg;
     }
     /**
      * Get kilo grams
-     *
+     * @return Kilograms on the concentration
      */
     public KiloGram getKiloGram() {
         return kiloGram;
@@ -204,7 +217,7 @@ public class MassConcentration extends DerivedUnit {
     /**
      * Set Liter
      *
-     * @param liter
+     * @param liter Liters to use in the concentration calc
      */
     public void setLiter(Liter liter) {
         this.liter = liter;
@@ -212,6 +225,7 @@ public class MassConcentration extends DerivedUnit {
 
     /**
      * Get Liter
+     * @return Liters on the concentration
      */
     public Liter getLiter() {
         return liter;
@@ -219,9 +233,11 @@ public class MassConcentration extends DerivedUnit {
 
     /**
      * Compare to units using the names
-     *
      * @param otherUnit Other unit to compare to
-     * @throws MissingParameters
+     * @return 0 If objects are equal
+     *         Bigger 0 If otherUnit is bigger then current object
+     *         Smaller 0 If current object is bigger then otherUnit
+     * @throws MissingParameters thrown when not enough parameters are present to compare both
      */
     public int compareTo(MassConcentration otherUnit) throws MissingParameters {
         int res1 = toString().compareTo(otherUnit.toString());

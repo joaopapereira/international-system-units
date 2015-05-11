@@ -16,6 +16,9 @@ public class MolarConcentration extends DerivedUnit {
     Mole mole;
     Liter liter;
 
+    /**
+     * Default constructor
+     */
     public MolarConcentration() {
         super(Double.NaN);
         mole = null;
@@ -44,6 +47,11 @@ public class MolarConcentration extends DerivedUnit {
         return liter.name() + "/" + mole.name();
     }
 
+    /**
+     * Function that will solve the formulae
+     * @return The result
+     * @throws MissingParameters If not enough parameters are present
+     */
     @Override
     public double solve() throws MissingParameters {
         double result = Double.NaN;
@@ -77,11 +85,11 @@ public class MolarConcentration extends DerivedUnit {
         return result;
     }
 
+
     /**
-     * Function will generate the JSON representation
-     * of the object
+     * Retrieve JSON representation of the Unit
      *
-     * @return
+     * @return JSON Representation
      */
     @Override
     public JSONObject getRepresentation() {
@@ -129,8 +137,7 @@ public class MolarConcentration extends DerivedUnit {
 
     /**
      * Retrieve the abbreviated name of the unit
-     *
-     * @return
+     * @return Abbreviation of the name
      */
     @Override
     public String smallName() {
@@ -183,6 +190,11 @@ public class MolarConcentration extends DerivedUnit {
         return getAmountToUnit();
     }
 
+    /**
+     * Retrieve the volume in the concentration
+     * @return Liters in concentration
+     * @throws MissingParameters When do not have enough parameters to calculate
+     */
     public Liter getVolume() throws MissingParameters {
         if (liter == null) {
             solve();
@@ -190,10 +202,19 @@ public class MolarConcentration extends DerivedUnit {
         return liter;
     }
 
+    /**
+     * Set the volume in Liters
+     * @param liter Amount of liters in the concentration
+     */
     public void setVolume(Liter liter) {
         this.liter = liter;
     }
 
+    /**
+     * Retrieve the amount of moles in the concentration
+     * @return Moles in the concentration
+     * @throws MissingParameters When do not have enough parameters to calculate
+     */
     public Mole getMole() throws MissingParameters {
         if (mole == null) {
             solve();
@@ -201,6 +222,10 @@ public class MolarConcentration extends DerivedUnit {
         return mole;
     }
 
+    /**
+     * Set mole
+     * @param mole Moles in the concentration
+     */
     public void setMole(Mole mole) {
         this.mole = mole;
     }
@@ -208,7 +233,7 @@ public class MolarConcentration extends DerivedUnit {
     /**
      * Set Liter
      *
-     * @param liter
+     * @param liter Liters in the concentration
      */
     public void setLiter(Liter liter) {
         this.liter = liter;
@@ -216,9 +241,11 @@ public class MolarConcentration extends DerivedUnit {
 
     /**
      * Compare to units using the names
-     *
      * @param otherUnit Other unit to compare to
-     * @throws MissingParameters
+     * @return 0 If objects are equal
+     *         Bigger 0 If otherUnit is bigger then current object
+     *         Smaller 0 If current object is bigger then otherUnit
+     * @throws MissingParameters If not enough parameters are present
      */
     public int compareTo(MolarConcentration otherUnit) throws MissingParameters {
         int res1 = toString().compareTo(otherUnit.toString());

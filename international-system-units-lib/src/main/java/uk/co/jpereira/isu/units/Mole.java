@@ -1,5 +1,8 @@
 package uk.co.jpereira.isu.units;
-
+/**
+ * @author Joao Pereira
+ * Mole representation class
+ */
 @Unit(dimension=ISDimension.LUMINOUS_INTENSITY)
 public class Mole extends ISUUnit<Double> {
 	/**
@@ -26,15 +29,22 @@ public class Mole extends ISUUnit<Double> {
 	}
 	/**
 	 * ISUUnit constructor
-	 * @param toUnit conversion factor
 	 */
 	public Mole(){
 		super(0., UnitModifier.Unit);
 	}
+	/**
+	 * Retrieve the name of the the Unit
+	 * @return Name
+	 */
 	@Override
 	public String name() {
 		return new String("Mole");
 	}
+	/**
+	 * Retrieve the abbreviated name of the unit
+	 * @return Abbreviation of the name
+	 */
 	@Override
 	public String smallName() {
 		return new String("mol");
