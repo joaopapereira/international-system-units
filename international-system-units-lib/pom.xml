@@ -110,7 +110,7 @@
  <parent>
  	<groupId>uk.co.jpereira</groupId>
  	<artifactId>international-system-units</artifactId>
- 	<version>0.0.1-SNAPSHOT</version>
+ 	<version>0.0.1</version>
  </parent>
  <groupId>uk.co.jpereira</groupId>
 </project>
