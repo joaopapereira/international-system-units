@@ -97,7 +97,7 @@ public class UnitConverterPanel extends Panel {
 				fromUnit = fromBox.getSelectedModifier();
 				toUnit = toBox.getSelectedModifier();
 				System.out.println("Selected stuff is: " + fromUnit + " -> " + toUnit);
-				ISUUnit myUnit = ((ISUUnit) unitBox.getSelectedItem());
+				ISUUnit myUnit = ((ISUUnit) ((ComboBoxItem)unitBox.getSelectedItem()).getValue());
 				try {
 					toText.setText(Double.toString(ISUUnits.unitConvert(myUnit, fromUnit, toUnit, f)));
 				} catch (UnitNotConvertible e) {
