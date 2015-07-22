@@ -10,15 +10,18 @@ import uk.co.jpereira.views.MainView;
 public class ApplicationLauncher {
 	
 	public static void main(String[] args) {
-	    try {
-	    	
-			FileInputStream fis =  new FileInputStream("src/main/resources/logging.properties");
+		ApplicationLauncher launcher = new ApplicationLauncher();
+		launcher.launch();
+	}
+	private void launch(){
+		try {
+			FileInputStream fis = new FileInputStream(getClass().getClassLoader().getResource("logging.properties").getFile());
 			LogManager.getLogManager().readConfiguration(fis);
 		} catch (SecurityException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 
+
 		// TODO Auto-generated method stub
 		EventQueue.invokeLater(new Runnable() {
 			@Override
@@ -28,5 +31,4 @@ public class ApplicationLauncher {
 			}
 		});
 	}
-
 }

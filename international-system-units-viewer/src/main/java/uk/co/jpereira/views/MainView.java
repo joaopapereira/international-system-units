@@ -19,11 +19,13 @@ public class MainView extends JFrame implements Observer{
 	 * Create the frame.
 	 */
 	public MainView() {
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/icon.png"));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(fullSize);
 		getContentPane().setLayout(null);
 		getContentPane().setPreferredSize(contentSize);
+		setIconImage(icon.getImage());
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setPreferredSize(contentSize);
